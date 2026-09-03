@@ -106,10 +106,15 @@ export const LoginPage: React.FC = () => {
           </form>
 
           {/* Quick Demo Fill Buttons */}
-          <div className="pt-4 border-t border-slate-800 space-y-2">
-            <span className="text-[11px] font-mono text-slate-400 block text-center uppercase tracking-wider">
-              Quick Demo Accounts (Local Dev)
-            </span>
+          <div className="pt-4 border-t border-slate-800 space-y-2.5">
+            <div className="text-center space-y-1">
+              <span className="text-[11px] font-mono text-slate-400 block uppercase tracking-wider">
+                Demo Accounts
+              </span>
+              <p className="text-[11px] text-slate-500">
+                Pre-configured evaluation credentials with full interactive access
+              </p>
+            </div>
             <div className="grid grid-cols-2 gap-2">
               <button
                 type="button"

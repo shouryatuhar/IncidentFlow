@@ -39,6 +39,10 @@ describe('LoginPage Flow', () => {
 
     const emailInput = screen.getByPlaceholderText(/engineer@incidentflow.dev/i) as HTMLInputElement;
     expect(emailInput.value).toBe('admin@incidentflow.dev');
+
+    const engDemoBtn = screen.getByText(/Engineer Demo/i);
+    fireEvent.click(engDemoBtn);
+    expect(emailInput.value).toBe('engineer@incidentflow.dev');
   });
 
   it('handles login submission', async () => {
