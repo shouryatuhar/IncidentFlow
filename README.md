@@ -13,12 +13,15 @@ Inspired by internal engineering operations tools like Linear and PagerDuty, Inc
 
 ---
 
-## 🌐 Live Deployments & Documentation
+## 🌐 Live Cloud Deployments & Documentation
 
-- **Production Web Application (Vercel)**: [https://frontend-murex-omega-87.vercel.app](https://frontend-murex-omega-87.vercel.app)
-- **Interactive Swagger UI**: [http://localhost:4000/api/docs](http://localhost:4000/api/docs)
-- **OpenAPI 3.0 JSON Spec**: [http://localhost:4000/api/docs.json](http://localhost:4000/api/docs.json)
-- **1-Click Full-Stack Cloud Blueprint**: [`render.yaml`](./render.yaml) (Provision PostgreSQL, Express Backend, and Frontend SPA on Render)
+- **Production Web Application**: [https://frontend-murex-omega-87.vercel.app](https://frontend-murex-omega-87.vercel.app)
+- **Production REST API**: [https://backend-pink-gamma-zqtni7yani.vercel.app/api](https://backend-pink-gamma-zqtni7yani.vercel.app/api)
+- **Live Interactive Swagger UI**: [https://backend-pink-gamma-zqtni7yani.vercel.app/api/docs](https://backend-pink-gamma-zqtni7yani.vercel.app/api/docs)
+- **Live OpenAPI 3.0 JSON Spec**: [https://backend-pink-gamma-zqtni7yani.vercel.app/api/docs.json](https://backend-pink-gamma-zqtni7yani.vercel.app/api/docs.json)
+- **Live Health Probe**: [https://backend-pink-gamma-zqtni7yani.vercel.app/api/health](https://backend-pink-gamma-zqtni7yani.vercel.app/api/health)
+- **Cloud Database**: Managed PostgreSQL via Neon (AWS us-east-2) with SSL encryption
+- **1-Click Infrastructure Blueprint**: [`render.yaml`](./render.yaml) (Turnkey Render blueprint)
 
 ---
 

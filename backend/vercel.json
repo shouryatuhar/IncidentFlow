@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "api/index.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "api/index.ts"
+    }
+  ],
+  "env": {
+    "NODE_ENV": "production",
+    "DATABASE_URL": "postgresql://neondb_owner:npg_VBFD9UwQZYK6@ep-autumn-smoke-ay82v2wn.c-5.us-east-2.aws.neon.tech/neondb?sslmode=require",
+    "JWT_SECRET": "production-jwt-secret-incidentflow-2026",
+    "JWT_EXPIRES_IN": "7d",
+    "WEBHOOK_SECRET": "incidentflow-whsec-supersecretkey123"
+  }
+}
