@@ -2,9 +2,23 @@
 
 > **A modern full-stack DevOps incident management platform for engineering teams.**
 
+[![IncidentFlow CI](https://github.com/shouryatuhar/IncidentFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/shouryatuhar/IncidentFlow/actions)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-success?style=flat&logo=vercel)](https://frontend-murex-omega-87.vercel.app)
+[![API Docs](https://img.shields.io/badge/OpenAPI-Swagger%203.0-blue?style=flat&logo=swagger)](http://localhost:4000/api/docs)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 IncidentFlow allows software engineering teams to declare, track, triage, investigate, and resolve production incidents with real-time timelines, status workflows, role-based access control, automated external monitoring webhooks, and reliability analytics.
 
 Inspired by internal engineering operations tools like Linear and PagerDuty, IncidentFlow prioritizes a clean, high-density, dark-mode user interface, type safety across the stack, and persistent PostgreSQL audit records.
+
+---
+
+## 🌐 Live Deployments & Documentation
+
+- **Production Web Application (Vercel)**: [https://frontend-murex-omega-87.vercel.app](https://frontend-murex-omega-87.vercel.app)
+- **Interactive Swagger UI**: [http://localhost:4000/api/docs](http://localhost:4000/api/docs)
+- **OpenAPI 3.0 JSON Spec**: [http://localhost:4000/api/docs.json](http://localhost:4000/api/docs.json)
+- **1-Click Full-Stack Cloud Blueprint**: [`render.yaml`](./render.yaml) (Provision PostgreSQL, Express Backend, and Frontend SPA on Render)
 
 ---
 
@@ -25,7 +39,7 @@ Inspired by internal engineering operations tools like Linear and PagerDuty, Inc
                             ▼
 ┌────────────────────────────────────────────────────────┐
 │                  Express + TypeScript                  │
-│       Modular Architecture, Zod Validation, JWT        │
+│       Helmet, Rate Limiter, Zod Validation, JWT        │
 └───────────────────────────┬────────────────────────────┘
                             │
                             ▼
@@ -41,41 +55,34 @@ Inspired by internal engineering operations tools like Linear and PagerDuty, Inc
 └────────────────────────────────────────────────────────┘
 ```
 
-### Architecture Rationale
+### Architecture Highlights
 
-- **React + TypeScript + Vite + Tailwind CSS**: Provides rapid hot-reloading in development and a fast, lightweight production bundle. Tailwind CSS gives full control over a dark-mode engineering design system without the bloat of generic component libraries.
-- **TanStack Query (React Query v5)**: Eliminates state synchronization bugs, manages asynchronous server state, provides automatic caching, and simplifies optimistic updates and cache invalidation.
-- **Express + TypeScript + Zod**: Provides a battle-tested, modular REST architecture where validation happens at the boundary before controllers execute business logic.
-- **Prisma ORM + PostgreSQL**: Guarantees ACID compliance for incident timeline logs and status transitions. Prisma generates end-to-end TypeScript types directly from the database schema, preventing runtime schema mismatches.
-
-*Note: IncidentFlow is built for internal engineering workflows and operational demonstration. While robust and strictly typed, it is not claimed to be a multi-tenant, enterprise production-ready platform without adding distributed rate limiters, SSO/SAML, and cold backup replication.*
+- **Frontend**: React 18 SPA built with Vite for fast HMR. UI state and caching managed with TanStack React Query v5. Styled with Tailwind CSS in an engineering-grade dark theme (`slate-950`/`slate-900`).
+- **Backend**: Express.js in strict TypeScript. Layered modular architecture separating routes, controllers, business services, and validation schemas.
+- **Database & ORM**: PostgreSQL with Prisma ORM providing compile-time type safety, relational foreign key constraints, cascade deletes, and migrations.
+- **Security**: Hardened with `helmet` HTTP headers, `express-rate-limit` against brute-force and DDoS, bcrypt password hashing, and signed JWT tokens.
+- **API Documentation**: Built-in interactive OpenAPI 3.0 / Swagger documentation mounted at `/api/docs`.
 
 ---
 
 ## Tech Stack
 
-### Frontend
-- **Framework**: React 18 with TypeScript
-- **Bundler**: Vite 6
-- **Routing**: React Router DOM v6
-- **Server State**: TanStack React Query v5
-- **Styling**: Tailwind CSS (Dark theme)
-- **Visualizations**: Recharts
-- **Icons**: Lucide React
-- **Testing**: Vitest, React Testing Library, JSDOM
-
-### Backend
-- **Runtime**: Node.js (v20+)
-- **Server**: Express.js with TypeScript
-- **Database ORM**: Prisma ORM v5
-- **Database**: PostgreSQL 15+
-- **Validation**: Zod
-- **Authentication**: JSON Web Tokens (JWT), bcryptjs
-- **Testing**: Vitest, Supertest
-
-### Infrastructure & DevOps
-- **Containers**: Docker & Docker Compose
-- **Web Server**: Nginx (frontend reverse proxy in container)
+| Layer | Technology | Rationale |
+|-------|------------|-----------|
+| **Frontend Framework** | React 18 + Vite 6 | Industry-standard component model with instant HMR and optimized production bundles |
+| **Styling** | Tailwind CSS | Utility-first CSS enabling an engineering dark-mode design system without runtime overhead |
+| **Server State** | TanStack Query v5 | Automatic background refetching, caching, window focus revalidation, and mutation invalidation |
+| **Routing** | React Router v6 | Client-side routing with protected route middleware and session-aware navigation |
+| **Charts** | Recharts | Composable SVG data visualizations for MTTR, severity distributions, and incident volume |
+| **Backend Runtime** | Node.js (v20+) + Express | Mature, predictable event-driven runtime with low latency and clean middleware architecture |
+| **Type Safety** | TypeScript (Strict) | End-to-end type safety between database models, API payloads, and frontend state |
+| **Database ORM** | Prisma ORM v5 | Type-safe queries, migration engine, and schema synchronization |
+| **Database** | PostgreSQL 15 | Battle-tested relational database with ACID compliance and robust date-arithmetic for MTTR |
+| **Security** | Helmet + Rate Limit | HTTP security headers, anti-sniffing, anti-clickjacking, and windowed rate limiting |
+| **API Docs** | Swagger UI + OpenAPI 3.0 | Self-documenting API explorer for developer ease and third-party integrations |
+| **Validation** | Zod | Runtime validation for inbound HTTP request bodies, params, and webhook payloads |
+| **Testing** | Vitest + RTL + Supertest | Blazing-fast test runner for backend integration and frontend UI component suites |
+| **DevOps** | Docker + Compose + Actions | Reproducible multi-container environments and automated CI testing pipelines |
 
 ---
 
@@ -83,52 +90,47 @@ Inspired by internal engineering operations tools like Linear and PagerDuty, Inc
 
 ```
 IncidentFlow/
+├── .github/
+│   └── workflows/
+│       └── ci.yml             # GitHub Actions CI workflow (PostgreSQL + Test + Build)
 ├── backend/
 │   ├── prisma/
-│   │   ├── schema.prisma         # Prisma database schema & relations
-│   │   └── seed.ts               # Realistic production seed dataset
+│   │   ├── schema.prisma      # Database schema (User, Service, Incident, Comment, Timeline)
+│   │   └── seed.ts            # Realistic development/demo dataset
 │   ├── src/
-│   │   ├── config/               # Environment variables and Prisma client
-│   │   ├── middleware/           # JWT authentication, RBAC, Zod validation, error handler
+│   │   ├── config/            # Environment variables, Prisma client, Swagger spec
+│   │   ├── middleware/        # JWT auth, RBAC guard, Zod validation, error handler
 │   │   ├── modules/
-│   │   │   ├── auth/             # Login, register, me endpoints & services
-│   │   │   ├── users/            # Team directory endpoints
-│   │   │   ├── services/         # Microservice catalog CRUD & health states
-│   │   │   ├── incidents/        # Incident lifecycle, triage, filtering
-│   │   │   ├── comments/         # Threaded investigation notes
-│   │   │   ├── timeline/         # Persistent chronological audit events
-│   │   │   ├── analytics/        # MTTR, severity, and volume aggregations
-│   │   │   └── webhooks/         # Automated external monitoring ingress
-│   │   ├── utils/                # Custom HTTP AppErrors
-│   │   ├── app.ts                # Express application setup
-│   │   └── server.ts             # Server startup & graceful shutdown
-│   ├── tests/                    # Vitest integration test suites
+│   │   │   ├── analytics/     # MTTR and incident volume aggregation endpoints
+│   │   │   ├── auth/          # Register, Login, Session (/api/auth/me)
+│   │   │   ├── comments/      # Incident comments and auto-timeline logging
+│   │   │   ├── incidents/     # Incident CRUD, triage, filtering, search
+│   │   │   ├── services/      # Microservice catalog CRUD with RBAC
+│   │   │   ├── timeline/      # Chronological PostgreSQL audit timeline
+│   │   │   ├── users/         # Team member directory
+│   │   │   └── webhooks/      # Inbound monitoring webhook ingress
+│   │   ├── utils/             # Typed application error classes
+│   │   ├── app.ts             # Express app setup, Helmet, Rate Limiter, Swagger
+│   │   └── server.ts          # Server entrypoint with graceful shutdown
+│   ├── tests/                 # Backend Vitest integration suites (Auth, RBAC, Security, etc.)
 │   ├── Dockerfile
-│   ├── package.json
 │   └── tsconfig.json
 ├── frontend/
 │   ├── src/
-│   │   ├── api/                  # Centralized typed API clients
-│   │   ├── components/
-│   │   │   ├── common/           # Badges, Buttons, Modals, StatCards, Toast
-│   │   │   ├── layout/           # AppLayout, Sidebar, ProtectedRoute
-│   │   │   ├── incidents/        # Table, FilterBar, Timeline, Comments, CreateModal
-│   │   │   └── services/         # ServiceCards, ServiceModal
-│   │   ├── context/              # AuthContext, ToastContext
-│   │   ├── pages/                # Dashboard, Incidents, Detail, Services, Analytics, Settings, Auth
-│   │   ├── tests/                # Vitest + RTL frontend test suites
-│   │   ├── types/                # Shared TypeScript models
-│   │   ├── App.tsx               # Client routes
-│   │   └── main.tsx              # React DOM mounting
+│   │   ├── api/               # Typed Axios/Fetch client modules
+│   │   ├── components/        # Badges, Buttons, Modals, Tables, Timeline, Comments
+│   │   ├── context/           # AuthContext and ToastContext
+│   │   ├── pages/             # Dashboard, Incidents, Detail, Services, Analytics, Settings, Auth
+│   │   └── tests/             # React Testing Library component tests
 │   ├── Dockerfile
 │   ├── nginx.conf
-│   ├── package.json
-│   ├── tailwind.config.js
+│   ├── vercel.json            # Vercel deployment configuration
 │   └── vite.config.ts
-├── docker-compose.yml            # Multi-container orchestration (Postgres, Backend, Frontend)
-├── .env.example                  # Environment variable reference
+├── docker-compose.yml         # Multi-container Postgres + Backend + Frontend
+├── render.yaml                # Render 1-click cloud deployment blueprint
+├── .env.example
 ├── .gitignore
-├── package.json                  # Monorepo management scripts
+├── package.json               # Monorepo management scripts
 └── README.md
 ```
 
@@ -143,7 +145,7 @@ IncidentFlow/
 - **Auto-Calculated Resolution Time**: Tracks incident duration (`resolvedAt - startedAt`).
 
 ### 2. Persistent Database Audit Timeline
-- Unlike UI-only implementations, all timeline events are stored in PostgreSQL table `timeline_events`.
+- All timeline events are stored in PostgreSQL table `timeline_events`.
 - Automatically logs transitions:
   - Incident declaration (`CREATED` / `WEBHOOK_CREATED`)
   - Engineer assignments (`ASSIGNED` / `UNASSIGNED`)
@@ -175,9 +177,46 @@ IncidentFlow/
 ### 5. Inbound Monitoring Webhook Ingress
 External monitoring systems (Datadog, Prometheus Alertmanager, Grafana, CloudWatch) can declare incidents automatically via `POST /api/webhooks/incidents`.
 - Authenticated via configurable `x-webhook-secret` header.
-- Validates payload with Zod.
+- Validates payload with Zod schemas.
 - Resolves affected service by name or ID.
-- Automatically creates incident and logs initial timeline event.
+- Automatically creates incident, auto-assigns service owner, and logs initial timeline event.
+
+---
+
+## Security & Reliability Engineering
+
+IncidentFlow adheres to enterprise security standards:
+
+- **Helmet Security Headers**: Automatically applies `X-Content-Type-Options: nosniff`, `X-Frame-Options: SAMEORIGIN`, `X-DNS-Prefetch-Control: off`, and Strict-Transport-Security.
+- **Rate Limiting**:
+  - **General API Limiter**: 120 requests/minute per IP across `/api/*`.
+  - **Strict Auth Limiter**: 30 requests/15 minutes on `/api/auth/login` and `/api/auth/register` to mitigate credential brute-forcing.
+- **Zod Runtime Schema Validation**: Every inbound request body, path parameter, and query string is verified against strict schemas before executing business logic.
+- **Sanitized Errors**: Operational exceptions return uniform `{ success: false, error: { message, details } }` responses. Database exceptions and server stack traces are never exposed to clients.
+- **PostgreSQL Cascades & Foreign Keys**: Relational data integrity is strictly enforced at the database engine level with cascade deletion on incident relations.
+
+---
+
+## Interactive API Documentation (OpenAPI / Swagger)
+
+IncidentFlow serves an interactive Swagger UI directly from the backend server:
+
+- **Swagger UI**: [http://localhost:4000/api/docs](http://localhost:4000/api/docs)
+- **Raw OpenAPI 3.0 Spec**: [http://localhost:4000/api/docs.json](http://localhost:4000/api/docs.json)
+
+The specification details request bodies, query parameters, authorization requirements (`BearerAuth` and `WebhookSecretAuth`), and response models for all 14 REST endpoints.
+
+---
+
+## Continuous Integration (GitHub Actions)
+
+A full CI workflow is configured in [`.github/workflows/ci.yml`](./.github/workflows/ci.yml):
+
+- **Service Container**: Automatically starts an isolated PostgreSQL 15 instance.
+- **Schema Migration**: Executes `prisma db push` to verify DDL scripts.
+- **Seeding**: Executes `db:seed` against test database.
+- **Test Suites**: Executes **all 33 automated tests** (28 backend integration tests + 8 frontend component tests).
+- **Production Build**: Compiles backend (`tsc`) and frontend (`vite build`) to guarantee zero compile-time regressions.
 
 ---
 
@@ -229,69 +268,86 @@ cp .env.example .env
 - PostgreSQL 15+ running locally (or via Docker)
 
 ### 1. Install Dependencies
-```bash
-# In backend
-cd backend && npm install
 
-# In frontend
-cd ../frontend && npm install
+```bash
+npm install
 ```
 
-### 2. Database Migrations & Seeding
-Ensure PostgreSQL is running and `DATABASE_URL` is configured in `.env`.
+### 2. Set Up Database
 
 ```bash
-# In backend directory
-cd backend
+# Push schema migrations to PostgreSQL
+npm run db:migrate
 
-# Push schema to database
-npx prisma db push
-
-# Seed realistic services, incidents, timeline events, and users
+# Seed demo users, services, and realistic incidents
 npm run db:seed
 ```
 
 ### 3. Start Development Servers
-You can run both concurrently from the project root:
+
+Run backend and frontend concurrently:
 
 ```bash
-# Start backend API (runs on port 4000)
+# Start backend API (http://localhost:4000)
 npm run dev:backend
 
-# In another terminal, start frontend (runs on port 3000)
+# In a separate terminal, start frontend (http://localhost:3000)
 npm run dev:frontend
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000) in your browser. Click **Admin Demo** or **Engineer Demo** to sign in immediately.
 
 ---
 
-## Docker Setup
+## Docker Compose Setup
 
-To run the entire multi-tier stack (PostgreSQL, Express Backend, Nginx + React Frontend) using Docker:
+Run the entire application (PostgreSQL, Backend API, Frontend Nginx) with a single command:
 
 ```bash
-# Build and launch all containers
 docker compose up --build
-
-# Run migrations and seed data inside backend container
-docker compose exec backend npx prisma db push
-docker compose exec backend npm run db:seed
-
-# Stop all containers
-docker compose down
 ```
 
-Services exposed:
+Access:
 - **Frontend Web UI**: [http://localhost:3000](http://localhost:3000)
 - **Backend API**: [http://localhost:4000/api](http://localhost:4000/api)
-- **PostgreSQL**: `localhost:5432`
+- **API Health Check**: [http://localhost:4000/api/health](http://localhost:4000/api/health)
+- **Swagger Documentation**: [http://localhost:4000/api/docs](http://localhost:4000/api/docs)
+
+To seed initial data inside Docker:
+
+```bash
+docker compose exec backend npx prisma db push
+docker compose exec backend npm run db:seed
+```
 
 ---
 
-## Automated Webhook Integration Example
+## Testing & Quality Assurance
 
-External monitoring services can declare incidents automatically using `curl`:
+Run the automated test suites:
+
+```bash
+# Run all tests (backend + frontend)
+npm run test
+
+# Run backend tests only (Vitest + Supertest)
+npm run test:backend
+
+# Run frontend tests only (Vitest + React Testing Library)
+npm run test:frontend
+
+# Run complete 36-point live end-to-end integration audit
+npx tsx backend/tests/full_audit.ts
+
+# Production build check
+npm run build
+```
+
+---
+
+## Monitoring Webhook Example
+
+Simulate an alert from Datadog or Prometheus using `cURL`:
 
 ```bash
 curl -X POST "http://localhost:4000/api/webhooks/incidents" \
@@ -300,95 +356,13 @@ curl -X POST "http://localhost:4000/api/webhooks/incidents" \
   -d '{
     "service": "Payment API",
     "title": "Payment API latency above threshold",
-    "description": "Average latency exceeded 2 seconds across us-east-1 workers",
+    "description": "Average latency exceeded 2.5 seconds across worker pods in us-east-1",
     "severity": "SEV_2"
   }'
 ```
 
-### Expected Response:
-```json
-{
-  "success": true,
-  "data": {
-    "id": "c1f7b0e1-...",
-    "title": "Payment API latency above threshold",
-    "description": "Average latency exceeded 2 seconds across us-east-1 workers",
-    "severity": "SEV_2",
-    "status": "INVESTIGATING",
-    "serviceId": "...",
-    "startedAt": "2026-09-03T...",
-    "service": {
-      "name": "Payment API"
-    }
-  }
-}
-```
-
 ---
 
-## Running Tests
+## License
 
-### Backend Test Suite (Auth, RBAC, Incidents, Webhooks, Analytics)
-```bash
-cd backend
-npm test
-```
-
-### Frontend Test Suite (Login, Incident List, Filter Bar)
-```bash
-cd frontend
-npm test
-```
-
----
-
-## Building for Production
-
-### Backend Build
-```bash
-cd backend
-npm run build
-```
-Generates production JavaScript files in `backend/dist/`.
-
-### Frontend Build
-```bash
-cd frontend
-npm run build
-```
-Compiles and bundles static assets in `frontend/dist/`.
-
----
-
-## REST API Reference
-
-| Method | Endpoint | Access | Description |
-|--------|----------|--------|-------------|
-| `POST` | `/api/auth/register` | Public | Register new user |
-| `POST` | `/api/auth/login` | Public | Authenticate user & issue JWT |
-| `GET` | `/api/auth/me` | Authenticated | Retrieve current user profile |
-| `GET` | `/api/users` | Authenticated | List team members for assignment |
-| `GET` | `/api/services` | Authenticated | List microservices and health statuses |
-| `POST` | `/api/services` | Admin Only | Register a new microservice |
-| `GET` | `/api/services/:id` | Authenticated | Inspect single service details |
-| `PATCH` | `/api/services/:id` | Admin Only | Update service details or health status |
-| `DELETE`| `/api/services/:id` | Admin Only | Remove service from registry |
-| `GET` | `/api/incidents` | Authenticated | Query incidents (search, filter, paginate) |
-| `POST` | `/api/incidents` | Authenticated | Declare new production incident |
-| `GET` | `/api/incidents/:id` | Authenticated | Retrieve incident investigation file |
-| `PATCH` | `/api/incidents/:id` | Authenticated | Update status, severity, or assignee |
-| `DELETE`| `/api/incidents/:id` | Admin Only | Delete incident record |
-| `GET` | `/api/incidents/:id/comments` | Authenticated | List incident investigation notes |
-| `POST` | `/api/incidents/:id/comments` | Authenticated | Post investigation note |
-| `GET` | `/api/incidents/:id/timeline` | Authenticated | Retrieve audit timeline events |
-| `GET` | `/api/analytics/overview` | Authenticated | Retrieve KPI overview (MTTR, active count) |
-| `GET` | `/api/analytics/incidents` | Authenticated | Retrieve severity/service/volume charts |
-| `POST` | `/api/webhooks/incidents` | Webhook Secret | Ingress incident from external monitoring |
-
----
-
-## Future Improvements
-- Multi-factor authentication (MFA/TOTP) and SAML/Okta integration.
-- WebSockets or Server-Sent Events (SSE) for live timeline broadcasting across connected operators.
-- Slack / PagerDuty bidirectional alert synchronization.
-- Post-Mortem / RCA export to Markdown and PDF.
+This project is licensed under the MIT License.
