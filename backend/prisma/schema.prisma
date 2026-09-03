@@ -1,0 +1,119 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  ENGINEER
+}
+
+enum ServiceStatus {
+  OPERATIONAL
+  DEGRADED
+  DOWN
+}
+
+enum Severity {
+  SEV_1
+  SEV_2
+  SEV_3
+  SEV_4
+}
+
+enum IncidentStatus {
+  INVESTIGATING
+  IDENTIFIED
+  MONITORING
+  RESOLVED
+}
+
+model User {
+  id                String            @id @default(uuid())
+  name              String
+  email             String            @unique
+  passwordHash      String
+  role              Role              @default(ENGINEER)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  ownedServices     Service[]         @relation("ServiceOwner")
+  reportedIncidents Incident[]        @relation("ReportedIncidents")
+  assignedIncidents Incident[]        @relation("AssignedIncidents")
+  comments          IncidentComment[]
+  timelineEvents    TimelineEvent[]
+
+  @@map("users")
+}
+
+model Service {
+  id          String        @id @default(uuid())
+  name        String        @unique
+  description String
+  status      ServiceStatus @default(OPERATIONAL)
+  ownerId     String
+  owner       User          @relation("ServiceOwner", fields: [ownerId], references: [id])
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  incidents   Incident[]
+
+  @@map("services")
+}
+
+model Incident {
+  id          String         @id @default(uuid())
+  title       String
+  description String
+  severity    Severity
+  status      IncidentStatus @default(INVESTIGATING)
+  serviceId   String
+  service     Service        @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  reporterId  String
+  reporter    User           @relation("ReportedIncidents", fields: [reporterId], references: [id])
+  assigneeId  String?
+  assignee    User?          @relation("AssignedIncidents", fields: [assigneeId], references: [id])
+  startedAt   DateTime       @default(now())
+  resolvedAt  DateTime?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+
+  comments    IncidentComment[]
+  timeline    TimelineEvent[]
+
+  @@index([status])
+  @@index([severity])
+  @@index([serviceId])
+  @@map("incidents")
+}
+
+model IncidentComment {
+  id         String   @id @default(uuid())
+  incidentId String
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  authorId   String
+  author     User     @relation(fields: [authorId], references: [id])
+  content    String
+  createdAt  DateTime @default(now())
+
+  @@index([incidentId])
+  @@map("incident_comments")
+}
+
+model TimelineEvent {
+  id         String   @id @default(uuid())
+  incidentId String
+  incident   Incident @relation(fields: [incidentId], references: [id], onDelete: Cascade)
+  actorId    String?
+  actor      User?    @relation(fields: [actorId], references: [id])
+  type       String
+  message    String
+  createdAt  DateTime @default(now())
+
+  @@index([incidentId])
+  @@map("timeline_events")
+}

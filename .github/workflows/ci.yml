@@ -1,0 +1,70 @@
+name: IncidentFlow CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test-and-build:
+    name: Test & Build (Full Stack)
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: incidentflow
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      NODE_ENV: test
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/incidentflow?schema=public
+      PORT: 4000
+      JWT_SECRET: test-jwt-secret-key-123456789
+      JWT_EXPIRES_IN: 7d
+      WEBHOOK_SECRET: incidentflow-whsec-supersecretkey123
+      VITE_API_URL: http://localhost:4000/api
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install backend dependencies
+        run: npm ci --prefix backend
+
+      - name: Install frontend dependencies
+        run: npm ci --prefix frontend
+
+      - name: Sync PostgreSQL schema with Prisma
+        run: npx prisma db push --schema=./backend/prisma/schema.prisma
+
+      - name: Seed demo data into PostgreSQL
+        run: npm run db:seed --prefix backend
+
+      - name: Run backend integration test suite
+        run: npm run test --prefix backend
+
+      - name: Run frontend component test suite
+        run: npm run test --prefix frontend
+
+      - name: Compile backend TypeScript to JavaScript (dist)
+        run: npm run build --prefix backend
+
+      - name: Compile frontend Vite production bundle (dist)
+        run: npm run build --prefix frontend

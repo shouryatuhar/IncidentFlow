@@ -1,0 +1,29 @@
+{
+  "name": "incidentflow",
+  "version": "1.0.0",
+  "description": "A modern full-stack DevOps incident management platform for engineering teams.",
+  "private": true,
+  "scripts": {
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "build:backend": "npm run build --prefix backend",
+    "build:frontend": "npm run build --prefix frontend",
+    "build": "npm run build:backend && npm run build:frontend",
+    "test:backend": "npm run test --prefix backend",
+    "test:frontend": "npm run test --prefix frontend",
+    "test": "npm run test:backend && npm run test:frontend",
+    "db:migrate": "npm run db:migrate --prefix backend",
+    "db:seed": "npm run db:seed --prefix backend",
+    "docker:up": "docker compose up --build",
+    "docker:down": "docker compose down"
+  },
+  "keywords": [
+    "incident-management",
+    "devops",
+    "sre",
+    "monitoring",
+    "linear-style"
+  ],
+  "author": "",
+  "license": "ISC"
+}
