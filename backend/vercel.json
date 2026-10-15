@@ -14,7 +14,7 @@
   ],
   "env": {
     "NODE_ENV": "production",
-    "DATABASE_URL": "postgresql://neondb_owner:npg_VBFD9UwQZYK6@ep-autumn-smoke-ay82v2wn.c-5.us-east-2.aws.neon.tech/neondb?sslmode=require",
+    "DATABASE_URL": "postgresql://neondb_owner:npg_R2LDnQr9oJAb@ep-round-queen-b46tcipf.c-6.us-east-2.aws.neon.tech/neondb?sslmode=require",
     "JWT_SECRET": "production-jwt-secret-incidentflow-2026",
     "JWT_EXPIRES_IN": "7d",
     "WEBHOOK_SECRET": "incidentflow-whsec-supersecretkey123"
