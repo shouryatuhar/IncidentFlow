@@ -3,26 +3,37 @@
 @tailwind utilities;
 
 @layer base {
+  * {
+    border-color: #1f2127;
+  }
   body {
-    @apply bg-slate-950 text-slate-100 antialiased font-sans selection:bg-rose-500/30 selection:text-rose-200;
+    background-color: #08090a;
+    color: #f4f4f5;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  ::selection {
+    background: rgba(94, 106, 210, 0.28);
+    color: #ffffff;
   }
 }
 
-/* Custom modern scrollbar for data tables and logs */
+/* Linear-inspired ultra-slim scrollbars */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #090d16;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
-  border-radius: 4px;
+  background: #23252c;
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
+  background: #363944;
 }

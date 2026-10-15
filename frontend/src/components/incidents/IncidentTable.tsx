@@ -30,7 +30,7 @@ export const IncidentTable: React.FC<IncidentTableProps> = ({
 
   if (isLoading) {
     return (
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-8 shadow-sm">
+      <div className="bg-[#0d0e11] border border-[#1f2127] rounded-[6px] p-8">
         <LoadingSpinner message="Fetching incidents from database..." />
       </div>
     );
@@ -45,7 +45,7 @@ export const IncidentTable: React.FC<IncidentTableProps> = ({
           onResetFilters && (
             <button
               onClick={onResetFilters}
-              className="text-xs font-medium text-indigo-400 hover:text-indigo-300 underline"
+              className="text-xs font-medium text-[#ededed] hover:underline cursor-pointer"
             >
               Reset all filters
             </button>
@@ -56,95 +56,95 @@ export const IncidentTable: React.FC<IncidentTableProps> = ({
   }
 
   return (
-    <div className="bg-slate-900 border border-slate-800 rounded-xl shadow-sm overflow-hidden">
+    <div className="bg-[#0d0e11] border border-[#1f2127] rounded-[6px] overflow-hidden">
       <div className="overflow-x-auto">
-        <table className="w-full text-left text-sm text-slate-300">
-          <thead className="bg-slate-950/70 border-b border-slate-800 text-xs font-semibold text-slate-400 uppercase tracking-wider font-mono">
+        <table className="w-full text-left text-xs text-[#a1a1aa]">
+          <thead className="bg-[#0d0e11] border-b border-[#1f2127] text-[11px] font-medium text-[#71717a] uppercase tracking-wider font-mono">
             <tr>
-              <th scope="col" className="px-5 py-3.5 w-36">
+              <th scope="col" className="px-3.5 py-2.5 w-32">
                 Severity
               </th>
-              <th scope="col" className="px-5 py-3.5 min-w-[280px]">
+              <th scope="col" className="px-3.5 py-2.5 min-w-[280px]">
                 Incident
               </th>
-              <th scope="col" className="px-5 py-3.5">
+              <th scope="col" className="px-3.5 py-2.5">
                 Service
               </th>
-              <th scope="col" className="px-5 py-3.5">
+              <th scope="col" className="px-3.5 py-2.5">
                 Status
               </th>
-              <th scope="col" className="px-5 py-3.5">
+              <th scope="col" className="px-3.5 py-2.5">
                 Assignee
               </th>
-              <th scope="col" className="px-5 py-3.5 text-right whitespace-nowrap">
+              <th scope="col" className="px-3.5 py-2.5 text-right whitespace-nowrap">
                 Started
               </th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-800/60">
+          <tbody className="divide-y divide-[#17181d]">
             {incidents.map((incident) => (
               <tr
                 key={incident.id}
                 onClick={() => navigate(`/incidents/${incident.id}`)}
-                className="hover:bg-slate-800/50 cursor-pointer transition-colors group"
+                className="hover:bg-[#121316] cursor-pointer transition-colors group"
               >
                 {/* Severity */}
-                <td className="px-5 py-4 whitespace-nowrap">
+                <td className="px-3.5 py-2.5 whitespace-nowrap">
                   <SeverityBadge severity={incident.severity} />
                 </td>
 
-                {/* Title & Metadata */}
-                <td className="px-5 py-4">
-                  <div className="flex items-baseline gap-2">
-                    <span className="font-semibold text-slate-100 group-hover:text-indigo-300 transition-colors">
+                {/* Title & Description */}
+                <td className="px-3.5 py-2.5">
+                  <div className="flex items-center gap-2">
+                    <span className="font-medium text-[#ededed] group-hover:text-[#ffffff] transition-colors truncate max-w-md">
                       {incident.title}
                     </span>
                     {incident._count && incident._count.comments > 0 && (
-                      <span className="inline-flex items-center gap-1 text-[11px] text-slate-400 font-mono">
+                      <span className="inline-flex items-center gap-1 text-[11px] text-[#71717a] font-mono shrink-0">
                         <MessageSquare className="w-3 h-3" />
                         {incident._count.comments}
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-400 truncate max-w-md mt-0.5">
+                  <p className="text-[11px] text-[#71717a] truncate max-w-md mt-0.5">
                     {incident.description}
                   </p>
                 </td>
 
                 {/* Service */}
-                <td className="px-5 py-4 whitespace-nowrap">
-                  <span className="inline-flex items-center px-2 py-0.5 rounded bg-slate-800 text-slate-300 border border-slate-700/80 text-xs font-mono">
+                <td className="px-3.5 py-2.5 whitespace-nowrap">
+                  <span className="inline-flex items-center px-1.5 py-0.5 rounded-[4px] bg-[#15161a] text-[#d4d4d8] border border-[#22242a] text-[11px] font-mono">
                     {incident.service?.name}
                   </span>
                 </td>
 
                 {/* Status */}
-                <td className="px-5 py-4 whitespace-nowrap">
+                <td className="px-3.5 py-2.5 whitespace-nowrap">
                   <StatusBadge status={incident.status} />
                 </td>
 
                 {/* Assignee */}
-                <td className="px-5 py-4 whitespace-nowrap">
+                <td className="px-3.5 py-2.5 whitespace-nowrap">
                   {incident.assignee ? (
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center text-[11px] font-bold text-slate-300 font-mono">
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-4 h-4 rounded-full bg-[#1c1d22] border border-[#2b2d35] flex items-center justify-center text-[9px] font-bold text-[#ededed] font-mono shrink-0">
                         {incident.assignee.name.charAt(0).toUpperCase()}
                       </div>
-                      <span className="text-xs text-slate-200">
+                      <span className="text-xs text-[#d4d4d8]">
                         {incident.assignee.name}
                       </span>
                     </div>
                   ) : (
-                    <span className="text-xs text-slate-500 italic flex items-center gap-1">
-                      <UserIcon className="w-3 h-3" /> Unassigned
+                    <span className="text-xs text-[#71717a] italic flex items-center gap-1">
+                      <UserIcon className="w-3 h-3 text-[#52525b]" /> Unassigned
                     </span>
                   )}
                 </td>
 
-                {/* Created / Started Time */}
-                <td className="px-5 py-4 text-right whitespace-nowrap font-mono text-xs text-slate-400">
+                {/* Started Time */}
+                <td className="px-3.5 py-2.5 text-right whitespace-nowrap font-mono text-[11px] text-[#71717a]">
                   <div className="inline-flex items-center gap-1">
-                    <Clock className="w-3 h-3 text-slate-500" />
+                    <Clock className="w-3 h-3 text-[#52525b]" />
                     {formatDate(incident.startedAt || incident.createdAt)}
                   </div>
                 </td>

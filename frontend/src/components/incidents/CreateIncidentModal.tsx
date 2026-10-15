@@ -96,11 +96,11 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
       subtitle="Report an outage, degradation, or operational anomaly"
       maxWidth="lg"
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3.5">
         {/* Title */}
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-            Incident Title <span className="text-rose-400">*</span>
+          <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+            Incident Title <span className="text-[#f87171]">*</span>
           </label>
           <input
             type="text"
@@ -108,20 +108,20 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
             placeholder="e.g. Auth API 504 gateway timeout on login"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all"
+            className="w-full h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] placeholder-[#71717a] focus:outline-none transition-colors"
           />
         </div>
 
         {/* Severity & Affected Service row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-              Severity Level <span className="text-rose-400">*</span>
+            <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+              Severity Level <span className="text-[#f87171]">*</span>
             </label>
             <select
               value={severity}
               onChange={(e) => setSeverity(e.target.value as Severity)}
-              className="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-mono"
+              className="w-full h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] focus:outline-none transition-colors font-mono cursor-pointer"
             >
               <option value="SEV_1">SEV-1 (Critical Outage)</option>
               <option value="SEV_2">SEV-2 (Major Impact)</option>
@@ -131,13 +131,13 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-              Affected Service <span className="text-rose-400">*</span>
+            <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+              Affected Service <span className="text-[#f87171]">*</span>
             </label>
             <select
               value={serviceId}
               onChange={(e) => setServiceId(e.target.value)}
-              className="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+              className="w-full h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] focus:outline-none transition-colors cursor-pointer"
               required
             >
               {services.map((svc) => (
@@ -151,13 +151,13 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
 
         {/* Assignee */}
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+          <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
             Initial Assignee
           </label>
           <select
             value={assigneeId}
             onChange={(e) => setAssigneeId(e.target.value)}
-            className="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+            className="w-full h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] focus:outline-none transition-colors cursor-pointer"
           >
             <option value="">-- Unassigned --</option>
             {users.map((u) => (
@@ -170,8 +170,8 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
 
         {/* Description */}
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-            Description & Impact <span className="text-rose-400">*</span>
+          <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+            Description & Impact <span className="text-[#f87171]">*</span>
           </label>
           <textarea
             required
@@ -179,20 +179,21 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
             placeholder="Describe what symptoms are being observed, error rates, regions affected, and initial mitigation steps..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all resize-none"
+            className="w-full p-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] placeholder-[#71717a] focus:outline-none transition-colors resize-none leading-relaxed"
           />
         </div>
 
         {/* Modal Actions */}
-        <div className="mt-6 flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-          <Button variant="secondary" type="button" onClick={onClose} disabled={createMutation.isPending}>
+        <div className="mt-4 flex items-center justify-end gap-2 pt-3 border-t border-[#1f2127]">
+          <Button variant="secondary" size="sm" type="button" onClick={onClose} disabled={createMutation.isPending}>
             Cancel
           </Button>
           <Button
             variant="danger"
+            size="sm"
             type="submit"
             isLoading={createMutation.isPending}
-            leftIcon={<AlertCircle className="w-4 h-4" />}
+            leftIcon={<AlertCircle className="w-3.5 h-3.5" />}
           >
             Declare Incident
           </Button>

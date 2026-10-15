@@ -90,8 +90,8 @@ export const IncidentDetailPage: React.FC = () => {
   if (!incident) {
     return (
       <div className="text-center py-12">
-        <p className="text-slate-400">Incident not found.</p>
-        <Link to="/incidents" className="text-indigo-400 text-sm mt-2 inline-block">
+        <p className="text-xs text-[#71717a] font-mono">Incident not found.</p>
+        <Link to="/incidents" className="text-xs text-[#ededed] hover:underline mt-2 inline-block">
           Return to Incidents list
         </Link>
       </div>
@@ -144,21 +144,21 @@ export const IncidentDetailPage: React.FC = () => {
       ? new Date(incident.resolvedAt).getTime()
       : Date.now();
     const diffMins = Math.round((end - start) / (1000 * 60));
-    if (diffMins < 60) return `${diffMins} minutes`;
+    if (diffMins < 60) return `${diffMins}m`;
     const hours = Math.floor(diffMins / 60);
     const mins = diffMins % 60;
     return `${hours}h ${mins}m`;
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Back Link & Action Bar */}
-      <div className="flex items-center justify-between">
+      <div className="flex items-center justify-between pb-1">
         <Link
           to="/incidents"
-          className="inline-flex items-center gap-1.5 text-xs font-medium text-slate-400 hover:text-slate-200 transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs text-[#71717a] hover:text-[#f4f4f5] transition-colors"
         >
-          <ArrowLeft className="w-4 h-4" /> Back to Incidents
+          <ArrowLeft className="w-3.5 h-3.5" /> Back to Incidents
         </Link>
 
         <div className="flex items-center gap-2">
@@ -166,7 +166,7 @@ export const IncidentDetailPage: React.FC = () => {
             <Button
               variant="primary"
               size="sm"
-              leftIcon={<CheckCircle2 className="w-4 h-4" />}
+              leftIcon={<CheckCircle2 className="w-3.5 h-3.5" />}
               onClick={() => handleStatusChange('RESOLVED')}
               isLoading={updateMutation.isPending}
             >
@@ -178,7 +178,7 @@ export const IncidentDetailPage: React.FC = () => {
             <Button
               variant="danger"
               size="sm"
-              leftIcon={<Trash2 className="w-3.5 h-3.5" />}
+              leftIcon={<Trash2 className="w-3 h-3" />}
               onClick={() => setIsDeleteModalOpen(true)}
             >
               Delete
@@ -187,31 +187,32 @@ export const IncidentDetailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* Main Incident Card Header */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-6 shadow-sm space-y-5">
-        {/* Title area */}
-        <div className="flex items-start justify-between gap-4">
-          <div className="flex-1">
+      {/* Main Two-Column Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5 items-start">
+        {/* Left Column: Title, Description, and Activity Feed (66%) */}
+        <div className="lg:col-span-2 space-y-4">
+          {/* Header & Description Card */}
+          <div className="bg-[#0d0e11] border border-[#1f2127] rounded-[6px] p-4 space-y-3">
             {isEditingDetails ? (
-              <div className="space-y-3">
+              <div className="space-y-2.5">
                 <input
                   type="text"
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  className="w-full text-lg font-bold bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-white"
+                  className="w-full text-sm font-semibold bg-[#08090a] border border-[#26282f] focus:border-[#5e6ad2] rounded-[5px] px-2.5 py-1.5 text-[#f4f4f5] focus:outline-none"
                 />
                 <textarea
                   rows={4}
                   value={editDescription}
                   onChange={(e) => setEditDescription(e.target.value)}
-                  className="w-full text-sm bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-slate-200 resize-none"
+                  className="w-full text-xs bg-[#08090a] border border-[#26282f] focus:border-[#5e6ad2] rounded-[5px] px-2.5 py-1.5 text-[#d4d4d8] focus:outline-none resize-none leading-relaxed"
                 />
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 pt-1">
                   <Button
                     size="sm"
                     variant="primary"
                     onClick={handleSaveEdit}
-                    leftIcon={<Check className="w-3.5 h-3.5" />}
+                    leftIcon={<Check className="w-3 h-3" />}
                   >
                     Save
                   </Button>
@@ -219,7 +220,7 @@ export const IncidentDetailPage: React.FC = () => {
                     size="sm"
                     variant="secondary"
                     onClick={() => setIsEditingDetails(false)}
-                    leftIcon={<X className="w-3.5 h-3.5" />}
+                    leftIcon={<X className="w-3 h-3" />}
                   >
                     Cancel
                   </Button>
@@ -227,162 +228,183 @@ export const IncidentDetailPage: React.FC = () => {
               </div>
             ) : (
               <div>
-                <div className="flex items-center gap-3 mb-2 flex-wrap">
+                <div className="flex items-center gap-2 mb-2 flex-wrap">
                   <SeverityBadge severity={incident.severity} />
                   <StatusBadge status={incident.status} />
-                  <span className="text-xs font-mono text-slate-500">
+                  <span className="text-[11px] font-mono text-[#71717a]">
                     ID: {incident.id.slice(0, 8)}
                   </span>
                 </div>
-                <h1 className="text-xl font-bold text-white tracking-tight flex items-center gap-2">
-                  {incident.title}
+                <div className="flex items-start justify-between gap-3">
+                  <h1 className="text-base font-semibold text-[#f4f4f5] tracking-tight leading-snug">
+                    {incident.title}
+                  </h1>
                   <button
                     onClick={handleStartEdit}
-                    className="text-slate-500 hover:text-slate-300 transition-colors p-1"
+                    className="text-[#71717a] hover:text-[#ededed] p-1 rounded hover:bg-[#15161a] transition-colors shrink-0"
                     title="Edit incident details"
                   >
-                    <Edit3 className="w-4 h-4" />
+                    <Edit3 className="w-3.5 h-3.5" />
                   </button>
-                </h1>
-                <p className="text-sm text-slate-300 mt-2 leading-relaxed whitespace-pre-wrap">
+                </div>
+                <p className="text-xs text-[#a1a1aa] mt-2 leading-relaxed whitespace-pre-wrap">
                   {incident.description}
                 </p>
               </div>
             )}
           </div>
+
+          {/* Activity / Investigation Workspace */}
+          <div className="bg-[#0d0e11] border border-[#1f2127] rounded-[6px] p-4">
+            {/* Tabs */}
+            <div className="flex items-center gap-4 border-b border-[#1f2127] pb-2.5 mb-4">
+              <button
+                onClick={() => setActiveTab('timeline')}
+                className={`flex items-center gap-1.5 text-xs font-medium pb-1 transition-colors cursor-pointer border-b ${
+                  activeTab === 'timeline'
+                    ? 'border-[#5e6ad2] text-[#f4f4f5]'
+                    : 'border-transparent text-[#71717a] hover:text-[#d4d4d8]'
+                }`}
+              >
+                <History className="w-3.5 h-3.5" />
+                <span>Timeline</span>
+                <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-[#15161a] text-[#71717a] border border-[#22242a]">
+                  {incident.timeline?.length || 0}
+                </span>
+              </button>
+
+              <button
+                onClick={() => setActiveTab('comments')}
+                className={`flex items-center gap-1.5 text-xs font-medium pb-1 transition-colors cursor-pointer border-b ${
+                  activeTab === 'comments'
+                    ? 'border-[#5e6ad2] text-[#f4f4f5]'
+                    : 'border-transparent text-[#71717a] hover:text-[#d4d4d8]'
+                }`}
+              >
+                <MessageSquare className="w-3.5 h-3.5" />
+                <span>Comments</span>
+                <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-[#15161a] text-[#71717a] border border-[#22242a]">
+                  {incident.comments?.length || 0}
+                </span>
+              </button>
+            </div>
+
+            {/* Tab Body */}
+            {activeTab === 'timeline' ? (
+              <TimelineView events={incident.timeline || []} />
+            ) : (
+              <CommentSection
+                incidentId={incident.id}
+                comments={incident.comments || []}
+              />
+            )}
+          </div>
         </div>
 
-        {/* Quick Attribute Toggles Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-slate-800 text-xs">
-          {/* Status Changer */}
-          <div className="space-y-1">
-            <span className="text-slate-500 font-semibold uppercase tracking-wider block text-[10px]">
-              Triage Status
-            </span>
-            <select
-              value={incident.status}
-              onChange={(e) => handleStatusChange(e.target.value as IncidentStatus)}
-              className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-slate-200 font-medium focus:ring-1 focus:ring-indigo-500"
-            >
-              <option value="INVESTIGATING">Investigating</option>
-              <option value="IDENTIFIED">Identified</option>
-              <option value="MONITORING">Monitoring</option>
-              <option value="RESOLVED">Resolved</option>
-            </select>
-          </div>
+        {/* Right Column: Compact Metadata Inspector (33%) */}
+        <div className="space-y-4">
+          <div className="bg-[#0d0e11] border border-[#1f2127] rounded-[6px] p-3.5 space-y-3 text-xs">
+            <div className="border-b border-[#1f2127] pb-2">
+              <span className="text-[11px] font-medium uppercase tracking-wider text-[#71717a]">
+                Incident Properties
+              </span>
+            </div>
 
-          {/* Severity Changer */}
-          <div className="space-y-1">
-            <span className="text-slate-500 font-semibold uppercase tracking-wider block text-[10px]">
-              Severity Level
-            </span>
-            <select
-              value={incident.severity}
-              onChange={(e) => handleSeverityChange(e.target.value as Severity)}
-              className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-slate-200 font-mono focus:ring-1 focus:ring-indigo-500"
-            >
-              <option value="SEV_1">SEV-1 (Critical)</option>
-              <option value="SEV_2">SEV-2 (Major)</option>
-              <option value="SEV_3">SEV-3 (Minor)</option>
-              <option value="SEV_4">SEV-4 (Low)</option>
-            </select>
-          </div>
+            {/* Status Control */}
+            <div className="space-y-1">
+              <span className="text-[11px] text-[#71717a] block">Status</span>
+              <select
+                value={incident.status}
+                onChange={(e) => handleStatusChange(e.target.value as IncidentStatus)}
+                className="w-full h-7 px-2 bg-[#08090a] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[4px] text-xs text-[#ededed] focus:outline-none transition-colors cursor-pointer"
+              >
+                <option value="INVESTIGATING">Investigating</option>
+                <option value="IDENTIFIED">Identified</option>
+                <option value="MONITORING">Monitoring</option>
+                <option value="RESOLVED">Resolved</option>
+              </select>
+            </div>
 
-          {/* Assignee Changer */}
-          <div className="space-y-1">
-            <span className="text-slate-500 font-semibold uppercase tracking-wider block text-[10px]">
-              Assigned Engineer
-            </span>
-            <select
-              value={incident.assigneeId || ''}
-              onChange={(e) => handleAssigneeChange(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-700 rounded px-2.5 py-1.5 text-slate-200 focus:ring-1 focus:ring-indigo-500"
-            >
-              <option value="">-- Unassigned --</option>
-              {users.map((u) => (
-                <option key={u.id} value={u.id}>
-                  {u.name}
-                </option>
-              ))}
-            </select>
-          </div>
+            {/* Severity Control */}
+            <div className="space-y-1">
+              <span className="text-[11px] text-[#71717a] block">Severity</span>
+              <select
+                value={incident.severity}
+                onChange={(e) => handleSeverityChange(e.target.value as Severity)}
+                className="w-full h-7 px-2 bg-[#08090a] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[4px] text-xs font-mono text-[#ededed] focus:outline-none transition-colors cursor-pointer"
+              >
+                <option value="SEV_1">SEV-1 (Critical)</option>
+                <option value="SEV_2">SEV-2 (Major)</option>
+                <option value="SEV_3">SEV-3 (Minor)</option>
+                <option value="SEV_4">SEV-4 (Low)</option>
+              </select>
+            </div>
 
-          {/* Affected Service */}
-          <div className="space-y-1">
-            <span className="text-slate-500 font-semibold uppercase tracking-wider block text-[10px]">
-              Affected Service
-            </span>
-            <div className="flex items-center gap-1.5 py-1.5 text-slate-200 font-medium">
-              <Server className="w-3.5 h-3.5 text-slate-400" />
-              <span>{incident.service?.name}</span>
+            {/* Assignee Control */}
+            <div className="space-y-1">
+              <span className="text-[11px] text-[#71717a] block">Assignee</span>
+              <select
+                value={incident.assigneeId || ''}
+                onChange={(e) => handleAssigneeChange(e.target.value)}
+                className="w-full h-7 px-2 bg-[#08090a] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[4px] text-xs text-[#ededed] focus:outline-none transition-colors cursor-pointer"
+              >
+                <option value="">-- Unassigned --</option>
+                {users.map((u) => (
+                  <option key={u.id} value={u.id}>
+                    {u.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Service */}
+            <div className="pt-2 border-t border-[#1f2127] space-y-1">
+              <span className="text-[11px] text-[#71717a] block">Affected Service</span>
+              <div className="flex items-center gap-1.5 text-xs text-[#ededed]">
+                <Server className="w-3.5 h-3.5 text-[#71717a]" />
+                <span className="font-mono text-[11px]">{incident.service?.name}</span>
+              </div>
+            </div>
+
+            {/* Reporter */}
+            <div className="pt-2 border-t border-[#1f2127] space-y-1">
+              <span className="text-[11px] text-[#71717a] block">Reporter</span>
+              <div className="flex items-center gap-1.5 text-xs text-[#a1a1aa]">
+                <UserIcon className="w-3.5 h-3.5 text-[#71717a]" />
+                <span>{incident.reporter?.name}</span>
+              </div>
+            </div>
+
+            {/* Started At */}
+            <div className="pt-2 border-t border-[#1f2127] space-y-1">
+              <span className="text-[11px] text-[#71717a] block">Started At</span>
+              <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#a1a1aa]">
+                <Calendar className="w-3.5 h-3.5 text-[#71717a]" />
+                <span>{formatDate(incident.startedAt)}</span>
+              </div>
+            </div>
+
+            {/* Resolved At */}
+            {incident.resolvedAt && (
+              <div className="pt-2 border-t border-[#1f2127] space-y-1">
+                <span className="text-[11px] text-[#71717a] block">Resolved At</span>
+                <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#34d399]">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  <span>{formatDate(incident.resolvedAt)}</span>
+                </div>
+              </div>
+            )}
+
+            {/* Duration / MTTR */}
+            <div className="pt-2 border-t border-[#1f2127] space-y-1">
+              <span className="text-[11px] text-[#71717a] block">Duration</span>
+              <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#ededed]">
+                <Clock className="w-3.5 h-3.5 text-[#71717a]" />
+                <span>{calculateDuration()}</span>
+              </div>
             </div>
           </div>
         </div>
-
-        {/* Metadata Details Row */}
-        <div className="flex items-center gap-6 pt-3 border-t border-slate-800/80 text-xs text-slate-400 flex-wrap font-mono">
-          <div className="flex items-center gap-1.5">
-            <UserIcon className="w-3.5 h-3.5 text-slate-500" />
-            <span>Reporter: {incident.reporter?.name}</span>
-          </div>
-
-          <div className="flex items-center gap-1.5">
-            <Calendar className="w-3.5 h-3.5 text-slate-500" />
-            <span>Started: {formatDate(incident.startedAt)}</span>
-          </div>
-
-          {incident.resolvedAt && (
-            <div className="flex items-center gap-1.5 text-emerald-400">
-              <CheckCircle2 className="w-3.5 h-3.5" />
-              <span>Resolved: {formatDate(incident.resolvedAt)}</span>
-            </div>
-          )}
-
-          <div className="flex items-center gap-1.5">
-            <Clock className="w-3.5 h-3.5 text-slate-500" />
-            <span>Duration: {calculateDuration()}</span>
-          </div>
-        </div>
-      </div>
-
-      {/* Investigation Workspace: Tabs for Timeline & Comments */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-5 shadow-sm">
-        {/* Tab Headers */}
-        <div className="flex items-center gap-6 border-b border-slate-800 pb-3 mb-5">
-          <button
-            onClick={() => setActiveTab('timeline')}
-            className={`flex items-center gap-2 text-sm font-semibold pb-1 transition-all border-b-2 cursor-pointer ${
-              activeTab === 'timeline'
-                ? 'border-indigo-500 text-white'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            <History className="w-4 h-4" />
-            Database Timeline ({incident.timeline?.length || 0})
-          </button>
-
-          <button
-            onClick={() => setActiveTab('comments')}
-            className={`flex items-center gap-2 text-sm font-semibold pb-1 transition-all border-b-2 cursor-pointer ${
-              activeTab === 'comments'
-                ? 'border-indigo-500 text-white'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
-            }`}
-          >
-            <MessageSquare className="w-4 h-4" />
-            Comments & Investigation ({incident.comments?.length || 0})
-          </button>
-        </div>
-
-        {/* Tab Content */}
-        {activeTab === 'timeline' ? (
-          <TimelineView events={incident.timeline || []} />
-        ) : (
-          <CommentSection
-            incidentId={incident.id}
-            comments={incident.comments || []}
-          />
-        )}
       </div>
 
       {/* Confirmation Modal for Delete */}

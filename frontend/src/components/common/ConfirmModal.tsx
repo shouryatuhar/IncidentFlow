@@ -28,22 +28,23 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
 }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} maxWidth="md">
-      <div className="flex gap-4 items-start">
+      <div className="flex gap-3 items-start">
         {isDangerous && (
-          <div className="p-2.5 rounded-full bg-rose-500/10 text-rose-400 shrink-0">
-            <AlertTriangle className="w-5 h-5" />
+          <div className="p-1.5 rounded-[4px] bg-rose-500/10 text-[#f87171] shrink-0 mt-0.5 border border-rose-500/20">
+            <AlertTriangle className="w-4 h-4" />
           </div>
         )}
         <div className="flex-1">
-          <p className="text-sm text-slate-300 leading-relaxed">{message}</p>
+          <p className="text-xs text-[#a1a1aa] leading-relaxed">{message}</p>
         </div>
       </div>
-      <div className="mt-6 flex justify-end gap-3">
-        <Button variant="secondary" onClick={onClose} disabled={isLoading}>
+      <div className="mt-5 flex justify-end gap-2 pt-3 border-t border-[#1f2127]">
+        <Button variant="secondary" size="sm" onClick={onClose} disabled={isLoading}>
           {cancelText}
         </Button>
         <Button
           variant={isDangerous ? 'danger' : 'primary'}
+          size="sm"
           onClick={onConfirm}
           isLoading={isLoading}
         >

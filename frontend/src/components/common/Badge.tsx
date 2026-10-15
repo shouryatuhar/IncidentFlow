@@ -8,7 +8,7 @@ interface BadgeProps {
 
 export const Badge: React.FC<BadgeProps> = ({ children, className = '' }) => (
   <span
-    className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium border tracking-wide font-mono ${className}`}
+    className={`inline-flex items-center px-1.5 py-0.5 rounded-[4px] text-[11px] font-medium border border-[#22242a] bg-[#121316] text-[#a1a1aa] tracking-tight font-mono ${className}`}
   >
     {children}
   </span>
@@ -18,26 +18,34 @@ export const SeverityBadge: React.FC<{ severity: Severity; className?: string }>
   severity,
   className = '',
 }) => {
-  const styles: Record<Severity, { label: string; style: string; dot: string }> = {
+  const styles: Record<Severity, { label: string; text: string; bg: string; border: string; dot: string }> = {
     SEV_1: {
       label: 'SEV-1 Critical',
-      style: 'bg-red-500/15 text-red-300 border-red-500/40',
-      dot: 'bg-red-500',
+      text: 'text-[#f87171]',
+      bg: 'bg-rose-500/[0.08]',
+      border: 'border-rose-500/25',
+      dot: 'bg-[#ef4444]',
     },
     SEV_2: {
       label: 'SEV-2 Major',
-      style: 'bg-orange-500/15 text-orange-300 border-orange-500/40',
-      dot: 'bg-orange-500',
+      text: 'text-[#fb923c]',
+      bg: 'bg-orange-500/[0.08]',
+      border: 'border-orange-500/25',
+      dot: 'bg-[#f97316]',
     },
     SEV_3: {
       label: 'SEV-3 Minor',
-      style: 'bg-yellow-500/15 text-yellow-300 border-yellow-500/40',
-      dot: 'bg-yellow-400',
+      text: 'text-[#facc15]',
+      bg: 'bg-amber-500/[0.08]',
+      border: 'border-amber-500/25',
+      dot: 'bg-[#eab308]',
     },
     SEV_4: {
       label: 'SEV-4 Low',
-      style: 'bg-blue-500/15 text-blue-300 border-blue-500/40',
-      dot: 'bg-blue-400',
+      text: 'text-[#94a3b8]',
+      bg: 'bg-slate-500/[0.08]',
+      border: 'border-slate-500/25',
+      dot: 'bg-[#64748b]',
     },
   };
 
@@ -45,10 +53,10 @@ export const SeverityBadge: React.FC<{ severity: Severity; className?: string }>
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-semibold border font-mono tracking-tight ${item.style} ${className}`}
+      className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[4px] text-[11px] font-medium border font-mono tracking-tight ${item.bg} ${item.text} ${item.border} ${className}`}
     >
-      <span className={`w-1.5 h-1.5 rounded-full ${item.dot} animate-pulse`} />
-      {item.label}
+      <span className={`w-1.5 h-1.5 rounded-full ${item.dot} shrink-0`} />
+      <span>{item.label}</span>
     </span>
   );
 };
@@ -57,22 +65,34 @@ export const StatusBadge: React.FC<{ status: IncidentStatus; className?: string 
   status,
   className = '',
 }) => {
-  const styles: Record<IncidentStatus, { label: string; style: string }> = {
+  const styles: Record<IncidentStatus, { label: string; text: string; bg: string; border: string; dot: string }> = {
     INVESTIGATING: {
       label: 'Investigating',
-      style: 'bg-rose-500/15 text-rose-300 border-rose-500/30',
+      text: 'text-[#fbbf24]',
+      bg: 'bg-amber-500/[0.08]',
+      border: 'border-amber-500/25',
+      dot: 'bg-[#f59e0b]',
     },
     IDENTIFIED: {
       label: 'Identified',
-      style: 'bg-amber-500/15 text-amber-300 border-amber-500/30',
+      text: 'text-[#818cf8]',
+      bg: 'bg-indigo-500/[0.08]',
+      border: 'border-indigo-500/25',
+      dot: 'bg-[#6366f1]',
     },
     MONITORING: {
       label: 'Monitoring',
-      style: 'bg-sky-500/15 text-sky-300 border-sky-500/30',
+      text: 'text-[#c084fc]',
+      bg: 'bg-purple-500/[0.08]',
+      border: 'border-purple-500/25',
+      dot: 'bg-[#a855f7]',
     },
     RESOLVED: {
       label: 'Resolved',
-      style: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30',
+      text: 'text-[#34d399]',
+      bg: 'bg-emerald-500/[0.08]',
+      border: 'border-emerald-500/25',
+      dot: 'bg-[#10b981]',
     },
   };
 
@@ -80,9 +100,10 @@ export const StatusBadge: React.FC<{ status: IncidentStatus; className?: string 
 
   return (
     <span
-      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border ${item.style} ${className}`}
+      className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[4px] text-[11px] font-medium border tracking-tight ${item.bg} ${item.text} ${item.border} ${className}`}
     >
-      {item.label}
+      <span className={`w-1.5 h-1.5 rounded-full ${item.dot} shrink-0`} />
+      <span>{item.label}</span>
     </span>
   );
 };
@@ -91,21 +112,27 @@ export const ServiceStatusBadge: React.FC<{ status: ServiceStatus; className?: s
   status,
   className = '',
 }) => {
-  const styles: Record<ServiceStatus, { label: string; style: string; dot: string }> = {
+  const styles: Record<ServiceStatus, { label: string; text: string; bg: string; border: string; dot: string }> = {
     OPERATIONAL: {
       label: 'Operational',
-      style: 'bg-emerald-500/10 text-emerald-300 border-emerald-500/30',
-      dot: 'bg-emerald-400',
+      text: 'text-[#34d399]',
+      bg: 'bg-emerald-500/[0.08]',
+      border: 'border-emerald-500/25',
+      dot: 'bg-[#10b981]',
     },
     DEGRADED: {
       label: 'Degraded',
-      style: 'bg-amber-500/10 text-amber-300 border-amber-500/30',
-      dot: 'bg-amber-400',
+      text: 'text-[#fbbf24]',
+      bg: 'bg-amber-500/[0.08]',
+      border: 'border-amber-500/25',
+      dot: 'bg-[#f59e0b]',
     },
     DOWN: {
       label: 'Down',
-      style: 'bg-rose-500/10 text-rose-300 border-rose-500/30',
-      dot: 'bg-rose-500',
+      text: 'text-[#f87171]',
+      bg: 'bg-rose-500/[0.08]',
+      border: 'border-rose-500/25',
+      dot: 'bg-[#ef4444]',
     },
   };
 
@@ -113,10 +140,10 @@ export const ServiceStatusBadge: React.FC<{ status: ServiceStatus; className?: s
 
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded text-xs font-medium border ${item.style} ${className}`}
+      className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[4px] text-[11px] font-medium border ${item.bg} ${item.text} ${item.border} ${className}`}
     >
-      <span className={`w-1.5 h-1.5 rounded-full ${item.dot}`} />
-      {item.label}
+      <span className={`w-1.5 h-1.5 rounded-full ${item.dot} shrink-0`} />
+      <span>{item.label}</span>
     </span>
   );
 };

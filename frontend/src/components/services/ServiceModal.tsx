@@ -96,47 +96,60 @@ export const ServiceModal: React.FC<ServiceModalProps> = ({
       }
       maxWidth="md"
     >
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-3.5">
         <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-            Service Name <span className="text-rose-400">*</span>
+          <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+            Service Name <span className="text-[#f87171]">*</span>
           </label>
           <input
             type="text"
             required
-            placeholder="e.g. Payment Gateway API"
+            placeholder="e.g. Auth Gateway"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+            className="w-full h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] placeholder-[#71717a] focus:outline-none transition-colors"
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+            Description <span className="text-[#f87171]">*</span>
+          </label>
+          <textarea
+            required
+            rows={3}
+            placeholder="Brief overview of functionality, SLA tier, and dependencies..."
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full p-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] placeholder-[#71717a] focus:outline-none transition-colors resize-none leading-relaxed"
+          />
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-              Service Status <span className="text-rose-400">*</span>
+            <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+              Current Health Status
             </label>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as ServiceStatus)}
-              className="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all font-mono"
+              className="w-full h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] focus:outline-none transition-colors cursor-pointer"
             >
               <option value="OPERATIONAL">Operational</option>
               <option value="DEGRADED">Degraded</option>
-              <option value="DOWN">Down / Outage</option>
+              <option value="DOWN">Down</option>
             </select>
           </div>
 
           <div>
-            <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-              Service Owner
+            <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+              Owner / Lead Engineer
             </label>
             <select
               value={ownerId}
               onChange={(e) => setOwnerId(e.target.value)}
-              className="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+              className="w-full h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] focus:outline-none transition-colors cursor-pointer"
             >
-              <option value="">Default Admin</option>
               {users.map((u) => (
                 <option key={u.id} value={u.id}>
                   {u.name}
@@ -146,25 +159,11 @@ export const ServiceModal: React.FC<ServiceModalProps> = ({
           </div>
         </div>
 
-        <div>
-          <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
-            Description <span className="text-rose-400">*</span>
-          </label>
-          <textarea
-            required
-            rows={3}
-            placeholder="Brief overview of component architecture, repository, and SLA..."
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-3.5 py-2 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all resize-none"
-          />
-        </div>
-
-        <div className="mt-6 flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-          <Button variant="secondary" type="button" onClick={onClose} disabled={saveMutation.isPending}>
+        <div className="mt-4 flex items-center justify-end gap-2 pt-3 border-t border-[#1f2127]">
+          <Button variant="secondary" size="sm" type="button" onClick={onClose} disabled={saveMutation.isPending}>
             Cancel
           </Button>
-          <Button type="submit" isLoading={saveMutation.isPending}>
+          <Button variant="primary" size="sm" type="submit" isLoading={saveMutation.isPending}>
             {isEditing ? 'Save Changes' : 'Register Service'}
           </Button>
         </div>

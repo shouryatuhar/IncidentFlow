@@ -3,7 +3,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { Button } from '../components/common/Button';
-import { Radio, Lock, Mail, ArrowRight, ShieldCheck, Wrench } from 'lucide-react';
+import { Lock, Mail, ArrowRight, ShieldCheck, Wrench } from 'lucide-react';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -42,54 +42,54 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex flex-col items-center justify-center p-4 selection:bg-rose-500/30">
-      <div className="w-full max-w-md space-y-6">
+    <div className="min-h-screen bg-[#08090a] flex flex-col items-center justify-center p-4 selection:bg-[#5e6ad2]/30">
+      <div className="w-full max-w-sm space-y-4">
         {/* Brand Header */}
-        <div className="text-center space-y-2">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-tr from-rose-600 to-indigo-600 shadow-xl shadow-rose-950/60 mb-2">
-            <Radio className="w-6 h-6 text-white" />
+        <div className="text-center space-y-1">
+          <div className="inline-flex items-center justify-center w-8 h-8 rounded-[6px] bg-[#121316] border border-[#26282f] mb-2 shadow-subtle">
+            <span className="font-mono text-xs font-bold text-[#ededed]">IF</span>
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight font-mono">
-            Incident<span className="text-rose-400">Flow</span>
+          <h1 className="text-lg font-semibold text-[#f4f4f5] tracking-tight">
+            IncidentFlow
           </h1>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-[#71717a]">
             DevOps incident management platform for engineering teams
           </p>
         </div>
 
         {/* Login Card */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-7 shadow-2xl space-y-5">
-          <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="bg-[#0d0e11] border border-[#1f2127] rounded-[6px] p-5 shadow-modal space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-3">
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+              <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
                 Work Email
               </label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <Mail className="w-3.5 h-3.5 text-[#71717a] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="email"
                   required
                   placeholder="engineer@incidentflow.dev"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                  className="w-full h-8 pl-8 pr-2.5 bg-[#08090a] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] placeholder-[#71717a] focus:outline-none transition-colors"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-1.5">
+              <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
                 Password
               </label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <Lock className="w-3.5 h-3.5 text-[#71717a] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="password"
                   required
                   placeholder="••••••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full pl-10 pr-3.5 py-2.5 bg-slate-950 border border-slate-700/80 rounded-lg text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all"
+                  className="w-full h-8 pl-8 pr-2.5 bg-[#08090a] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] placeholder-[#71717a] focus:outline-none transition-colors"
                 />
               </div>
             </div>
@@ -97,21 +97,21 @@ export const LoginPage: React.FC = () => {
             <Button
               type="submit"
               variant="primary"
-              className="w-full py-2.5 mt-2 font-semibold shadow-md"
+              className="w-full h-8 mt-1 font-medium"
               isLoading={isLoading}
-              rightIcon={<ArrowRight className="w-4 h-4" />}
+              rightIcon={<ArrowRight className="w-3 h-3" />}
             >
               Sign In to IncidentFlow
             </Button>
           </form>
 
           {/* Quick Demo Fill Buttons */}
-          <div className="pt-4 border-t border-slate-800 space-y-2.5">
-            <div className="text-center space-y-1">
-              <span className="text-[11px] font-mono text-slate-400 block uppercase tracking-wider">
+          <div className="pt-3 border-t border-[#1f2127] space-y-2">
+            <div className="text-center space-y-0.5">
+              <span className="text-[10px] font-mono text-[#71717a] block uppercase tracking-wider">
                 Demo Accounts
               </span>
-              <p className="text-[11px] text-slate-500">
+              <p className="text-[11px] text-[#52525b]">
                 Pre-configured evaluation credentials with full interactive access
               </p>
             </div>
@@ -119,17 +119,17 @@ export const LoginPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => handleQuickLogin('admin@incidentflow.dev')}
-                className="flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg text-xs font-medium text-slate-300 hover:text-white transition-colors"
+                className="flex items-center justify-center gap-1.5 h-7 bg-[#15161a] hover:bg-[#1f2026] border border-[#22242a] rounded-[5px] text-xs font-medium text-[#d4d4d8] hover:text-[#ffffff] transition-colors cursor-pointer"
               >
-                <ShieldCheck className="w-3.5 h-3.5 text-purple-400" />
+                <ShieldCheck className="w-3 h-3 text-[#c084fc]" />
                 Admin Demo
               </button>
               <button
                 type="button"
                 onClick={() => handleQuickLogin('engineer@incidentflow.dev')}
-                className="flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg text-xs font-medium text-slate-300 hover:text-white transition-colors"
+                className="flex items-center justify-center gap-1.5 h-7 bg-[#15161a] hover:bg-[#1f2026] border border-[#22242a] rounded-[5px] text-xs font-medium text-[#d4d4d8] hover:text-[#ffffff] transition-colors cursor-pointer"
               >
-                <Wrench className="w-3.5 h-3.5 text-blue-400" />
+                <Wrench className="w-3 h-3 text-[#818cf8]" />
                 Engineer Demo
               </button>
             </div>
@@ -137,9 +137,9 @@ export const LoginPage: React.FC = () => {
         </div>
 
         {/* Footer Link */}
-        <p className="text-center text-xs text-slate-500">
+        <p className="text-center text-xs text-[#71717a]">
           Need an account?{' '}
-          <Link to="/register" className="text-indigo-400 hover:text-indigo-300 font-medium">
+          <Link to="/register" className="text-[#ededed] hover:underline font-medium">
             Register new operator
           </Link>
         </p>

@@ -21,25 +21,25 @@ export const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    'inline-flex items-center justify-center font-medium rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-950 disabled:opacity-50 disabled:cursor-not-allowed select-none cursor-pointer';
+    'inline-flex items-center justify-center font-medium rounded-[5px] transition-colors focus:outline-none focus:ring-1 focus:ring-[#5e6ad2] disabled:opacity-40 disabled:cursor-not-allowed select-none cursor-pointer';
 
   const sizeStyles = {
-    sm: 'text-xs px-2.5 py-1.5 gap-1.5',
-    md: 'text-sm px-3.5 py-2 gap-2',
-    lg: 'text-base px-4 py-2.5 gap-2.5',
+    sm: 'h-7 text-xs px-2 gap-1.5',
+    md: 'h-8 text-xs px-2.5 gap-1.5',
+    lg: 'h-9 text-sm px-3.5 gap-2',
   }[size];
 
   const variantStyles = {
     primary:
-      'bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm focus:ring-indigo-500 border border-indigo-500/30',
+      'bg-[#ededed] hover:bg-[#ffffff] text-[#08090a] font-medium border border-transparent shadow-[0_1px_2px_rgba(0,0,0,0.5)] active:bg-[#dcdcdc]',
     secondary:
-      'bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 focus:ring-slate-500',
+      'bg-[#15161a] hover:bg-[#1f2026] text-[#d4d4d8] hover:text-[#ffffff] border border-[#26282f] active:bg-[#252730]',
     danger:
-      'bg-rose-600 hover:bg-rose-500 text-white shadow-sm focus:ring-rose-500 border border-rose-500/30',
+      'bg-rose-500/10 hover:bg-rose-500/20 text-[#f87171] border border-rose-500/25 active:bg-rose-500/30',
     ghost:
-      'bg-transparent hover:bg-slate-800 text-slate-300 hover:text-white focus:ring-slate-600',
+      'bg-transparent hover:bg-[#18191e] text-[#a1a1aa] hover:text-[#f4f4f5]',
     outline:
-      'bg-transparent hover:bg-slate-800/60 text-slate-300 hover:text-white border border-slate-700 focus:ring-slate-600',
+      'bg-transparent hover:bg-[#15161a] text-[#d4d4d8] hover:text-[#ffffff] border border-[#26282f]',
   }[variant];
 
   return (
@@ -49,7 +49,7 @@ export const Button: React.FC<ButtonProps> = ({
       {...props}
     >
       {isLoading ? (
-        <Loader2 className="w-4 h-4 animate-spin text-current" />
+        <Loader2 className="w-3.5 h-3.5 animate-spin text-current shrink-0" />
       ) : (
         leftIcon
       )}

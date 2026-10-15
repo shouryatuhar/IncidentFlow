@@ -71,21 +71,21 @@ export const IncidentsPage: React.FC = () => {
   const pagination = data?.pagination || { total: 0, page: 1, totalPages: 1 };
 
   return (
-    <div className="space-y-5">
-      {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-3">
+      {/* Page Header */}
+      <div className="flex items-center justify-between gap-4 pb-2">
         <div>
-          <h1 className="text-xl font-bold text-white tracking-tight font-mono">
-            Incidents Management
+          <h1 className="text-base font-semibold text-[#f4f4f5] tracking-tight">
+            Incidents
           </h1>
-          <p className="text-xs text-slate-400 mt-1">
-            Monitor, prioritize, assign, and coordinate engineering triage workflows
+          <p className="text-xs text-[#71717a] mt-0.5">
+            Prioritize, assign, and coordinate engineering triage workflows
           </p>
         </div>
         <Button
-          variant="danger"
+          variant="secondary"
           size="sm"
-          leftIcon={<Plus className="w-4 h-4" />}
+          leftIcon={<Plus className="w-3.5 h-3.5 text-[#f87171]" />}
           onClick={() => setIsCreateModalOpen(true)}
         >
           Declare Incident
@@ -115,20 +115,20 @@ export const IncidentsPage: React.FC = () => {
 
       {/* Pagination Bar */}
       {pagination.totalPages > 1 && (
-        <div className="flex items-center justify-between px-2 pt-2 text-xs text-slate-400">
+        <div className="flex items-center justify-between px-1 pt-2 text-xs text-[#71717a]">
           <span>
-            Showing page <span className="font-semibold text-slate-200">{pagination.page}</span> of{' '}
-            <span className="font-semibold text-slate-200">{pagination.totalPages}</span> (
-            {pagination.total} total incidents)
+            Page <span className="font-mono text-[#ededed]">{pagination.page}</span> of{' '}
+            <span className="font-mono text-[#ededed]">{pagination.totalPages}</span>{' '}
+            <span className="text-[#52525b]">({pagination.total} total)</span>
           </span>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <Button
               variant="secondary"
               size="sm"
               disabled={pagination.page <= 1}
               onClick={() => setPage((p) => Math.max(1, p - 1))}
-              leftIcon={<ChevronLeft className="w-3.5 h-3.5" />}
+              leftIcon={<ChevronLeft className="w-3 h-3" />}
             >
               Previous
             </Button>
@@ -137,7 +137,7 @@ export const IncidentsPage: React.FC = () => {
               size="sm"
               disabled={pagination.page >= pagination.totalPages}
               onClick={() => setPage((p) => p + 1)}
-              rightIcon={<ChevronRight className="w-3.5 h-3.5" />}
+              rightIcon={<ChevronRight className="w-3 h-3" />}
             >
               Next
             </Button>
