@@ -122,7 +122,7 @@ describe('Webhook Ingress API', () => {
 
     // Verify timeline event was persisted in PostgreSQL
     const timelineEvents = await prisma.timelineEvent.findMany({
-      where: { incidentId: createdIncidentId },
+      where: { incidentId: res.body.data.id },
     });
     expect(timelineEvents.length).toBeGreaterThanOrEqual(1);
     expect(timelineEvents[0].type).toBe('CREATED');
