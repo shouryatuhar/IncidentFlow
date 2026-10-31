@@ -17,6 +17,10 @@ import { requestObservability, getHttpMetrics } from './middleware/observability
 export const createApp = () => {
   const app = express();
 
+  // Vercel forwards client IPs through one trusted proxy. This lets rate
+  // limiting apply per client instead of treating every request as one IP.
+  app.set('trust proxy', 1);
+
   // Security Headers via Helmet
   app.use(helmet({ contentSecurityPolicy: false }));
 
