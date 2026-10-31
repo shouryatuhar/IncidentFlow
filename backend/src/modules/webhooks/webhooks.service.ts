@@ -2,18 +2,43 @@ import { prisma } from '../../config/prisma';
 import { ENV } from '../../config/env';
 import { NotFoundError, UnauthorizedError } from '../../utils/errors';
 import { WebhookIncidentInput } from './webhooks.validation';
-import { IncidentStatus } from '@prisma/client';
+import { IncidentStatus, Prisma } from '@prisma/client';
+import { timingSafeEqual } from 'crypto';
 
 export class WebhooksService {
   static verifySecret(headerSecret?: string | string[]): void {
     const secret = Array.isArray(headerSecret) ? headerSecret[0] : headerSecret;
 
-    if (!secret || secret !== ENV.WEBHOOK_SECRET) {
+    const expected = ENV.WEBHOOK_SECRET;
+    const isWeakDemoSecret = Boolean(expected && /supersecret|change.?me|replace.?with/i.test(expected));
+    if (!expected || expected.length < 32 || isWeakDemoSecret) {
+      throw new UnauthorizedError('Webhook ingress is not configured with a strong secret');
+    }
+
+    const providedBuffer = secret ? Buffer.from(secret) : Buffer.alloc(0);
+    const expectedBuffer = Buffer.from(expected);
+
+    if (
+      providedBuffer.length !== expectedBuffer.length ||
+      !timingSafeEqual(providedBuffer, expectedBuffer)
+    ) {
       throw new UnauthorizedError('Invalid or missing webhook secret');
     }
   }
 
   static async handleIncomingIncident(input: WebhookIncidentInput) {
+    if (input.eventId) {
+      const existingIncident = await prisma.incident.findUnique({
+        where: { sourceEventId: input.eventId },
+        include: {
+          service: true,
+          reporter: { select: { id: true, name: true, email: true } },
+          assignee: { select: { id: true, name: true, email: true } },
+        },
+      });
+      if (existingIncident) return { incident: existingIncident, duplicate: true };
+    }
+
     // Locate service by exact ID or case-insensitive Name
     let service = await prisma.service.findFirst({
       where: {
@@ -41,53 +66,69 @@ export class WebhooksService {
         reporterId = admin.id;
       } else {
         const anyUser = await prisma.user.findFirst();
-        reporterId = anyUser!.id;
+        if (!anyUser) throw new NotFoundError('Cannot create webhook incidents until at least one user exists');
+        reporterId = anyUser.id;
       }
     }
 
-    // Create the incident
-    const incident = await prisma.incident.create({
-      data: {
-        title: input.title,
-        description: input.description,
-        severity: input.severity,
-        status: IncidentStatus.INVESTIGATING,
-        serviceId: service.id,
-        reporterId,
-        assigneeId: service.ownerId, // Auto-assign to service owner
-      },
-      include: {
-        service: true,
-        reporter: {
-          select: { id: true, name: true, email: true },
-        },
-        assignee: {
-          select: { id: true, name: true, email: true },
-        },
-      },
-    });
+    try {
+      const incident = await prisma.$transaction(async (tx) => {
+        const created = await tx.incident.create({
+          data: {
+            title: input.title,
+            description: input.description,
+            severity: input.severity,
+            status: IncidentStatus.INVESTIGATING,
+            serviceId: service.id,
+            reporterId,
+            assigneeId: service.ownerId,
+            sourceEventId: input.eventId,
+          },
+          include: {
+            service: true,
+            reporter: { select: { id: true, name: true, email: true } },
+            assignee: { select: { id: true, name: true, email: true } },
+          },
+        });
 
-    // Create initial timeline event
-    await prisma.timelineEvent.create({
-      data: {
-        incidentId: incident.id,
-        actorId: reporterId,
-        type: 'CREATED',
-        message: `Incident automatically created via external webhook with severity ${input.severity}`,
-      },
-    });
+        await tx.timelineEvent.create({
+          data: {
+            incidentId: created.id,
+            actorId: reporterId,
+            type: 'CREATED',
+            message: `Incident automatically created via external webhook with severity ${input.severity}`,
+          },
+        });
 
-    if (service.owner) {
-      await prisma.timelineEvent.create({
-        data: {
-          incidentId: incident.id,
-          actorId: reporterId,
-          type: 'ASSIGNED',
-          message: `Auto-assigned to service owner: ${service.owner.name}`,
-        },
+        if (service.owner) {
+          await tx.timelineEvent.create({
+            data: {
+              incidentId: created.id,
+              actorId: reporterId,
+              type: 'ASSIGNED',
+              message: `Auto-assigned to service owner: ${service.owner.name}`,
+            },
+          });
+        }
+        return created;
       });
-    }
 
-    return incident;
+      return { incident, duplicate: false };
+    } catch (error) {
+      // Concurrent provider retries can both pass the initial lookup; the unique
+      // constraint makes one winner and this returns its persisted result.
+      if (input.eventId && error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+        const existingIncident = await prisma.incident.findUnique({
+          where: { sourceEventId: input.eventId },
+          include: {
+            service: true,
+            reporter: { select: { id: true, name: true, email: true } },
+            assignee: { select: { id: true, name: true, email: true } },
+          },
+        });
+        if (existingIncident) return { incident: existingIncident, duplicate: true };
+      }
+      throw error;
+    }
   }
 }

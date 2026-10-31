@@ -51,17 +51,17 @@ export const Modal: React.FC<ModalProps> = ({
       {/* Modal Dialog */}
       <div
         ref={modalRef}
-        className={`relative z-10 w-full ${maxWidthStyles} bg-[#111215] border border-[#26282f] rounded-[6px] shadow-modal overflow-hidden flex flex-col max-h-[90vh]`}
+        className={`relative z-10 w-full ${maxWidthStyles} bg-[#202520] border border-[#343c32] rounded-[6px] shadow-modal overflow-hidden flex flex-col max-h-[90vh]`}
       >
         {/* Header */}
-        <div className="px-4 py-3 border-b border-[#1f2127] flex items-center justify-between bg-[#111215]">
+        <div className="px-4 py-3 border-b border-[#30372f] flex items-center justify-between bg-[#202520]">
           <div>
-            <h3 className="text-[13px] font-semibold text-[#f4f4f5] tracking-tight">{title}</h3>
-            {subtitle && <p className="text-[11px] text-[#71717a] mt-0.5">{subtitle}</p>}
+            <h3 className="text-[13px] font-semibold text-[#e8ebe4] tracking-tight">{title}</h3>
+            {subtitle && <p className="text-[11px] text-[#818b7e] mt-0.5">{subtitle}</p>}
           </div>
           <button
             onClick={onClose}
-            className="p-1 rounded-[4px] text-[#71717a] hover:text-[#f4f4f5] hover:bg-[#18191e] transition-colors"
+            className="p-1 rounded-[4px] text-[#818b7e] hover:text-[#e8ebe4] hover:bg-[#242a23] transition-colors"
           >
             <X className="w-4 h-4" />
           </button>

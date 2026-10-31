@@ -42,7 +42,7 @@ export const AppLayout: React.FC = () => {
     : currentNav?.label || 'Overview';
 
   return (
-    <div className="flex min-h-screen bg-[#08090a] text-[#f4f4f5] font-sans antialiased">
+    <div className="flex min-h-screen bg-[#111411] text-[#e8ebe4] font-sans antialiased">
       {/* Mobile Menu Backdrop */}
       {isMobileMenuOpen && (
         <div
@@ -53,26 +53,29 @@ export const AppLayout: React.FC = () => {
 
       {/* Persistent Left Sidebar */}
       <aside
-        className={`fixed top-0 bottom-0 left-0 z-50 w-56 bg-[#0d0e11] border-r border-[#1f2127] flex flex-col transition-transform duration-150 ease-in-out lg:translate-x-0 ${
+        id="primary-navigation"
+        aria-label="Primary navigation"
+        className={`fixed top-0 bottom-0 left-0 z-50 w-56 bg-[#191d19] border-r border-[#30372f] flex flex-col transition-transform duration-150 ease-in-out lg:translate-x-0 ${
           isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Workspace Selector */}
-        <div className="h-11 px-3 border-b border-[#1f2127] flex items-center justify-between">
+        <div className="h-11 px-3 border-b border-[#30372f] flex items-center justify-between">
           <div className="flex items-center gap-2 min-w-0">
-            <div className="w-5 h-5 rounded-[4px] bg-[#1a1b20] border border-[#2a2c34] flex items-center justify-center shrink-0">
-              <span className="font-mono text-[10px] font-bold text-[#ededed]">IF</span>
+            <div className="w-5 h-5 rounded-[4px] bg-[#1a1b20] border border-[#3c453a] flex items-center justify-center shrink-0">
+              <span className="font-mono text-[10px] font-bold text-[#dce1d8]">IF</span>
             </div>
             <div className="flex items-center gap-1.5 truncate">
-              <span className="text-xs font-semibold text-[#f4f4f5] tracking-tight truncate">
+              <span className="text-xs font-semibold text-[#e8ebe4] tracking-tight truncate">
                 IncidentFlow
               </span>
-              <span className="text-[10px] text-[#71717a] font-mono">v1</span>
+              <span className="text-[10px] text-[#818b7e] font-mono">v1</span>
             </div>
           </div>
           <button
+            aria-label="Close navigation menu"
             onClick={() => setIsMobileMenuOpen(false)}
-            className="p-1 rounded text-[#71717a] hover:text-[#f4f4f5] lg:hidden"
+            className="p-1 rounded text-[#818b7e] hover:text-[#e8ebe4] lg:hidden"
           >
             <X className="w-4 h-4" />
           </button>
@@ -85,13 +88,13 @@ export const AppLayout: React.FC = () => {
               setIsCreateIncidentOpen(true);
               setIsMobileMenuOpen(false);
             }}
-            className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-[5px] bg-[#16171b] hover:bg-[#1d1f25] border border-[#24262d] text-xs font-medium text-[#ededed] transition-colors shadow-subtle group cursor-pointer"
+            className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-[5px] bg-[#16171b] hover:bg-[#1d1f25] border border-[#24262d] text-xs font-medium text-[#dce1d8] transition-colors shadow-subtle group cursor-pointer"
           >
             <span className="flex items-center gap-2">
               <Plus className="w-3.5 h-3.5 text-[#f87171]" />
               <span>New Incident</span>
             </span>
-            <kbd className="text-[10px] font-mono text-[#71717a] group-hover:text-[#a1a1aa] bg-[#101114] border border-[#22242a] px-1 py-0.2 rounded">
+            <kbd className="text-[10px] font-mono text-[#818b7e] group-hover:text-[#a5aea0] bg-[#101114] border border-[#2e352d] px-1 py-0.2 rounded">
               C
             </kbd>
           </button>
@@ -99,7 +102,7 @@ export const AppLayout: React.FC = () => {
 
         {/* Section Label */}
         <div className="px-3 pt-2 pb-1">
-          <span className="text-[10px] font-medium uppercase tracking-wider text-[#71717a]">
+          <span className="text-[10px] font-medium uppercase tracking-wider text-[#818b7e]">
             Workspace
           </span>
         </div>
@@ -116,7 +119,7 @@ export const AppLayout: React.FC = () => {
                 className={({ isActive }) =>
                   `flex items-center gap-2.5 px-2.5 py-1.5 rounded-[5px] text-xs font-medium transition-colors ${
                     isActive
-                      ? 'bg-[#18191e] text-[#f4f4f5]'
+                      ? 'bg-[#242a23] text-[#e8ebe4]'
                       : 'text-[#8a8f98] hover:text-[#e4e4e7] hover:bg-[#121316]'
                   }`
                 }
@@ -129,17 +132,17 @@ export const AppLayout: React.FC = () => {
         </nav>
 
         {/* User Account Section at Bottom */}
-        <div className="p-2.5 border-t border-[#1f2127] bg-[#0d0e11]">
-          <div className="flex items-center justify-between gap-2 p-1.5 rounded-[5px] hover:bg-[#15161a] transition-colors">
+        <div className="p-2.5 border-t border-[#30372f] bg-[#191d19]">
+          <div className="flex items-center justify-between gap-2 p-1.5 rounded-[5px] hover:bg-[#252b25] transition-colors">
             <div className="flex items-center gap-2 min-w-0">
-              <div className="w-5 h-5 rounded-full bg-[#1c1d22] border border-[#2b2d35] flex items-center justify-center font-bold text-[10px] text-[#ededed] shrink-0 font-mono">
+              <div className="w-5 h-5 rounded-full bg-[#2a3029] border border-[#3b4439] flex items-center justify-center font-bold text-[10px] text-[#dce1d8] shrink-0 font-mono">
                 {user?.name?.charAt(0).toUpperCase() || 'U'}
               </div>
               <div className="truncate">
-                <p className="text-xs font-medium text-[#ededed] truncate leading-tight">
+                <p className="text-xs font-medium text-[#dce1d8] truncate leading-tight">
                   {user?.name}
                 </p>
-                <p className="text-[10px] text-[#71717a] font-mono leading-none mt-0.5">
+                <p className="text-[10px] text-[#818b7e] font-mono leading-none mt-0.5">
                   {user?.role}
                 </p>
               </div>
@@ -147,7 +150,7 @@ export const AppLayout: React.FC = () => {
             <button
               onClick={handleLogout}
               title="Sign Out"
-              className="p-1 rounded text-[#71717a] hover:text-[#f87171] hover:bg-[#1f2026] transition-colors shrink-0"
+              className="p-1 rounded text-[#818b7e] hover:text-[#f87171] hover:bg-[#1f2026] transition-colors shrink-0"
             >
               <LogOut className="w-3.5 h-3.5" />
             </button>
@@ -158,18 +161,21 @@ export const AppLayout: React.FC = () => {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0 lg:pl-56">
         {/* Top Header Bar */}
-        <header className="h-11 px-4 sm:px-6 border-b border-[#1f2127] flex items-center justify-between bg-[#08090a] sticky top-0 z-30">
+        <header className="h-11 px-4 sm:px-6 border-b border-[#30372f] flex items-center justify-between bg-[#111411] sticky top-0 z-30">
           <div className="flex items-center gap-3">
             <button
+              aria-label="Open navigation menu"
+              aria-controls="primary-navigation"
+              aria-expanded={isMobileMenuOpen}
               onClick={() => setIsMobileMenuOpen(true)}
-              className="p-1.5 rounded text-[#71717a] hover:text-[#f4f4f5] hover:bg-[#15161a] lg:hidden"
+              className="p-1.5 rounded text-[#818b7e] hover:text-[#e8ebe4] hover:bg-[#252b25] lg:hidden"
             >
               <Menu className="w-4 h-4" />
             </button>
             <div className="flex items-center gap-2 text-xs">
-              <span className="text-[#71717a]">IncidentFlow</span>
-              <span className="text-[#52525b]">/</span>
-              <span className="font-medium text-[#f4f4f5]">{pageTitle}</span>
+              <span className="text-[#818b7e]">IncidentFlow</span>
+              <span className="text-[#667061]">/</span>
+              <span className="font-medium text-[#e8ebe4]">{pageTitle}</span>
             </div>
           </div>
 

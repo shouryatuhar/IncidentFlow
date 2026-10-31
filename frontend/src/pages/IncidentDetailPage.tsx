@@ -90,8 +90,8 @@ export const IncidentDetailPage: React.FC = () => {
   if (!incident) {
     return (
       <div className="text-center py-12">
-        <p className="text-xs text-[#71717a] font-mono">Incident not found.</p>
-        <Link to="/incidents" className="text-xs text-[#ededed] hover:underline mt-2 inline-block">
+        <p className="text-xs text-[#818b7e] font-mono">Incident not found.</p>
+        <Link to="/incidents" className="text-xs text-[#dce1d8] hover:underline mt-2 inline-block">
           Return to Incidents list
         </Link>
       </div>
@@ -156,7 +156,7 @@ export const IncidentDetailPage: React.FC = () => {
       <div className="flex items-center justify-between pb-1">
         <Link
           to="/incidents"
-          className="inline-flex items-center gap-1.5 text-xs text-[#71717a] hover:text-[#f4f4f5] transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs text-[#818b7e] hover:text-[#e8ebe4] transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" /> Back to Incidents
         </Link>
@@ -192,20 +192,20 @@ export const IncidentDetailPage: React.FC = () => {
         {/* Left Column: Title, Description, and Activity Feed (66%) */}
         <div className="lg:col-span-2 space-y-4">
           {/* Header & Description Card */}
-          <div className="bg-[#0d0e11] border border-[#1f2127] rounded-[6px] p-4 space-y-3">
+          <div className="bg-[#191d19] border border-[#30372f] rounded-[6px] p-4 space-y-3">
             {isEditingDetails ? (
               <div className="space-y-2.5">
                 <input
                   type="text"
                   value={editTitle}
                   onChange={(e) => setEditTitle(e.target.value)}
-                  className="w-full text-sm font-semibold bg-[#08090a] border border-[#26282f] focus:border-[#5e6ad2] rounded-[5px] px-2.5 py-1.5 text-[#f4f4f5] focus:outline-none"
+                  className="w-full text-sm font-semibold bg-[#111411] border border-[#343c32] focus:border-[#a2aa83] rounded-[5px] px-2.5 py-1.5 text-[#e8ebe4] focus:outline-none"
                 />
                 <textarea
                   rows={4}
                   value={editDescription}
                   onChange={(e) => setEditDescription(e.target.value)}
-                  className="w-full text-xs bg-[#08090a] border border-[#26282f] focus:border-[#5e6ad2] rounded-[5px] px-2.5 py-1.5 text-[#d4d4d8] focus:outline-none resize-none leading-relaxed"
+                  className="w-full text-xs bg-[#111411] border border-[#343c32] focus:border-[#a2aa83] rounded-[5px] px-2.5 py-1.5 text-[#c6cdc1] focus:outline-none resize-none leading-relaxed"
                 />
                 <div className="flex items-center gap-1.5 pt-1">
                   <Button
@@ -231,23 +231,23 @@ export const IncidentDetailPage: React.FC = () => {
                 <div className="flex items-center gap-2 mb-2 flex-wrap">
                   <SeverityBadge severity={incident.severity} />
                   <StatusBadge status={incident.status} />
-                  <span className="text-[11px] font-mono text-[#71717a]">
+                  <span className="text-[11px] font-mono text-[#818b7e]">
                     ID: {incident.id.slice(0, 8)}
                   </span>
                 </div>
                 <div className="flex items-start justify-between gap-3">
-                  <h1 className="text-base font-semibold text-[#f4f4f5] tracking-tight leading-snug">
+                  <h1 className="text-base font-semibold text-[#e8ebe4] tracking-tight leading-snug">
                     {incident.title}
                   </h1>
                   <button
                     onClick={handleStartEdit}
-                    className="text-[#71717a] hover:text-[#ededed] p-1 rounded hover:bg-[#15161a] transition-colors shrink-0"
+                    className="text-[#818b7e] hover:text-[#dce1d8] p-1 rounded hover:bg-[#252b25] transition-colors shrink-0"
                     title="Edit incident details"
                   >
                     <Edit3 className="w-3.5 h-3.5" />
                   </button>
                 </div>
-                <p className="text-xs text-[#a1a1aa] mt-2 leading-relaxed whitespace-pre-wrap">
+                <p className="text-xs text-[#a5aea0] mt-2 leading-relaxed whitespace-pre-wrap">
                   {incident.description}
                 </p>
               </div>
@@ -255,20 +255,20 @@ export const IncidentDetailPage: React.FC = () => {
           </div>
 
           {/* Activity / Investigation Workspace */}
-          <div className="bg-[#0d0e11] border border-[#1f2127] rounded-[6px] p-4">
+          <div className="bg-[#191d19] border border-[#30372f] rounded-[6px] p-4">
             {/* Tabs */}
-            <div className="flex items-center gap-4 border-b border-[#1f2127] pb-2.5 mb-4">
+            <div className="flex items-center gap-4 border-b border-[#30372f] pb-2.5 mb-4">
               <button
                 onClick={() => setActiveTab('timeline')}
                 className={`flex items-center gap-1.5 text-xs font-medium pb-1 transition-colors cursor-pointer border-b ${
                   activeTab === 'timeline'
-                    ? 'border-[#5e6ad2] text-[#f4f4f5]'
-                    : 'border-transparent text-[#71717a] hover:text-[#d4d4d8]'
+                    ? 'border-[#a2aa83] text-[#e8ebe4]'
+                    : 'border-transparent text-[#818b7e] hover:text-[#c6cdc1]'
                 }`}
               >
                 <History className="w-3.5 h-3.5" />
                 <span>Timeline</span>
-                <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-[#15161a] text-[#71717a] border border-[#22242a]">
+                <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-[#252b25] text-[#818b7e] border border-[#2e352d]">
                   {incident.timeline?.length || 0}
                 </span>
               </button>
@@ -277,13 +277,13 @@ export const IncidentDetailPage: React.FC = () => {
                 onClick={() => setActiveTab('comments')}
                 className={`flex items-center gap-1.5 text-xs font-medium pb-1 transition-colors cursor-pointer border-b ${
                   activeTab === 'comments'
-                    ? 'border-[#5e6ad2] text-[#f4f4f5]'
-                    : 'border-transparent text-[#71717a] hover:text-[#d4d4d8]'
+                    ? 'border-[#a2aa83] text-[#e8ebe4]'
+                    : 'border-transparent text-[#818b7e] hover:text-[#c6cdc1]'
                 }`}
               >
                 <MessageSquare className="w-3.5 h-3.5" />
                 <span>Comments</span>
-                <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-[#15161a] text-[#71717a] border border-[#22242a]">
+                <span className="text-[10px] font-mono px-1 py-0.2 rounded bg-[#252b25] text-[#818b7e] border border-[#2e352d]">
                   {incident.comments?.length || 0}
                 </span>
               </button>
@@ -303,20 +303,34 @@ export const IncidentDetailPage: React.FC = () => {
 
         {/* Right Column: Compact Metadata Inspector (33%) */}
         <div className="space-y-4">
-          <div className="bg-[#0d0e11] border border-[#1f2127] rounded-[6px] p-3.5 space-y-3 text-xs">
-            <div className="border-b border-[#1f2127] pb-2">
-              <span className="text-[11px] font-medium uppercase tracking-wider text-[#71717a]">
+          <div className="bg-[#191d19] border border-[#30372f] rounded-[6px] p-3.5 space-y-3 text-xs">
+            <div className="border-b border-[#30372f] pb-2">
+              <span className="text-[11px] font-medium uppercase tracking-wider text-[#818b7e]">
                 Incident Properties
               </span>
             </div>
 
+            {incident.status !== 'RESOLVED' && (
+              <div className="rounded border border-[#3c453a] bg-[#202520] p-2.5">
+                <p className="text-[10px] font-medium uppercase tracking-wide text-[#a2aa83]">Next triage step</p>
+                <p className="mt-1 text-xs leading-relaxed text-[#dce1d8]">
+                  {incident.status === 'INVESTIGATING'
+                    ? 'Identify the cause, assign an owner, and record findings in the timeline.'
+                    : incident.status === 'IDENTIFIED'
+                      ? 'Apply the mitigation, then move the incident to monitoring.'
+                      : 'Confirm recovery and add a final update before resolving.'}
+                </p>
+                {!incident.assignee && <p className="mt-1.5 text-xs font-medium text-[#fbbf24]">No owner assigned yet.</p>}
+              </div>
+            )}
+
             {/* Status Control */}
             <div className="space-y-1">
-              <span className="text-[11px] text-[#71717a] block">Status</span>
+              <span className="text-[11px] text-[#818b7e] block">Status</span>
               <select
                 value={incident.status}
                 onChange={(e) => handleStatusChange(e.target.value as IncidentStatus)}
-                className="w-full h-7 px-2 bg-[#08090a] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[4px] text-xs text-[#ededed] focus:outline-none transition-colors cursor-pointer"
+                className="w-full h-7 px-2 bg-[#111411] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[4px] text-xs text-[#dce1d8] focus:outline-none transition-colors cursor-pointer"
               >
                 <option value="INVESTIGATING">Investigating</option>
                 <option value="IDENTIFIED">Identified</option>
@@ -327,11 +341,11 @@ export const IncidentDetailPage: React.FC = () => {
 
             {/* Severity Control */}
             <div className="space-y-1">
-              <span className="text-[11px] text-[#71717a] block">Severity</span>
+              <span className="text-[11px] text-[#818b7e] block">Severity</span>
               <select
                 value={incident.severity}
                 onChange={(e) => handleSeverityChange(e.target.value as Severity)}
-                className="w-full h-7 px-2 bg-[#08090a] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[4px] text-xs font-mono text-[#ededed] focus:outline-none transition-colors cursor-pointer"
+                className="w-full h-7 px-2 bg-[#111411] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[4px] text-xs font-mono text-[#dce1d8] focus:outline-none transition-colors cursor-pointer"
               >
                 <option value="SEV_1">SEV-1 (Critical)</option>
                 <option value="SEV_2">SEV-2 (Major)</option>
@@ -342,11 +356,11 @@ export const IncidentDetailPage: React.FC = () => {
 
             {/* Assignee Control */}
             <div className="space-y-1">
-              <span className="text-[11px] text-[#71717a] block">Assignee</span>
+              <span className="text-[11px] text-[#818b7e] block">Assignee</span>
               <select
                 value={incident.assigneeId || ''}
                 onChange={(e) => handleAssigneeChange(e.target.value)}
-                className="w-full h-7 px-2 bg-[#08090a] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[4px] text-xs text-[#ededed] focus:outline-none transition-colors cursor-pointer"
+                className="w-full h-7 px-2 bg-[#111411] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[4px] text-xs text-[#dce1d8] focus:outline-none transition-colors cursor-pointer"
               >
                 <option value="">-- Unassigned --</option>
                 {users.map((u) => (
@@ -358,36 +372,36 @@ export const IncidentDetailPage: React.FC = () => {
             </div>
 
             {/* Service */}
-            <div className="pt-2 border-t border-[#1f2127] space-y-1">
-              <span className="text-[11px] text-[#71717a] block">Affected Service</span>
-              <div className="flex items-center gap-1.5 text-xs text-[#ededed]">
-                <Server className="w-3.5 h-3.5 text-[#71717a]" />
+            <div className="pt-2 border-t border-[#30372f] space-y-1">
+              <span className="text-[11px] text-[#818b7e] block">Affected Service</span>
+              <div className="flex items-center gap-1.5 text-xs text-[#dce1d8]">
+                <Server className="w-3.5 h-3.5 text-[#818b7e]" />
                 <span className="font-mono text-[11px]">{incident.service?.name}</span>
               </div>
             </div>
 
             {/* Reporter */}
-            <div className="pt-2 border-t border-[#1f2127] space-y-1">
-              <span className="text-[11px] text-[#71717a] block">Reporter</span>
-              <div className="flex items-center gap-1.5 text-xs text-[#a1a1aa]">
-                <UserIcon className="w-3.5 h-3.5 text-[#71717a]" />
+            <div className="pt-2 border-t border-[#30372f] space-y-1">
+              <span className="text-[11px] text-[#818b7e] block">Reporter</span>
+              <div className="flex items-center gap-1.5 text-xs text-[#a5aea0]">
+                <UserIcon className="w-3.5 h-3.5 text-[#818b7e]" />
                 <span>{incident.reporter?.name}</span>
               </div>
             </div>
 
             {/* Started At */}
-            <div className="pt-2 border-t border-[#1f2127] space-y-1">
-              <span className="text-[11px] text-[#71717a] block">Started At</span>
-              <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#a1a1aa]">
-                <Calendar className="w-3.5 h-3.5 text-[#71717a]" />
+            <div className="pt-2 border-t border-[#30372f] space-y-1">
+              <span className="text-[11px] text-[#818b7e] block">Started At</span>
+              <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#a5aea0]">
+                <Calendar className="w-3.5 h-3.5 text-[#818b7e]" />
                 <span>{formatDate(incident.startedAt)}</span>
               </div>
             </div>
 
             {/* Resolved At */}
             {incident.resolvedAt && (
-              <div className="pt-2 border-t border-[#1f2127] space-y-1">
-                <span className="text-[11px] text-[#71717a] block">Resolved At</span>
+              <div className="pt-2 border-t border-[#30372f] space-y-1">
+                <span className="text-[11px] text-[#818b7e] block">Resolved At</span>
                 <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#34d399]">
                   <CheckCircle2 className="w-3.5 h-3.5" />
                   <span>{formatDate(incident.resolvedAt)}</span>
@@ -396,10 +410,10 @@ export const IncidentDetailPage: React.FC = () => {
             )}
 
             {/* Duration / MTTR */}
-            <div className="pt-2 border-t border-[#1f2127] space-y-1">
-              <span className="text-[11px] text-[#71717a] block">Duration</span>
-              <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#ededed]">
-                <Clock className="w-3.5 h-3.5 text-[#71717a]" />
+            <div className="pt-2 border-t border-[#30372f] space-y-1">
+              <span className="text-[11px] text-[#818b7e] block">Duration</span>
+              <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#dce1d8]">
+                <Clock className="w-3.5 h-3.5 text-[#818b7e]" />
                 <span>{calculateDuration()}</span>
               </div>
             </div>

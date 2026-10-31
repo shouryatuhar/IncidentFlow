@@ -4,18 +4,18 @@
 
 @layer base {
   * {
-    border-color: #1f2127;
+    border-color: #30372f;
   }
   body {
-    background-color: #08090a;
-    color: #f4f4f5;
+    background-color: #111411;
+    color: #e8ebe4;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   ::selection {
-    background: rgba(94, 106, 210, 0.28);
-    color: #ffffff;
+    background: rgba(162, 170, 131, 0.35);
+    color: #f5f6f2;
   }
 }
 
@@ -30,10 +30,15 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #23252c;
+  background: #30372f;
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #363944;
+  background: #465042;
+}
+
+:focus-visible {
+  outline: 2px solid #a2aa83;
+  outline-offset: 2px;
 }

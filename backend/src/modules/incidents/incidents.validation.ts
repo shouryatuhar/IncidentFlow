@@ -23,6 +23,8 @@ export const queryIncidentsSchema = z.object({
   severity: z.nativeEnum(Severity).optional(),
   status: z.nativeEnum(IncidentStatus).optional(),
   serviceId: z.string().uuid().optional(),
+  startDate: z.string().date().optional(),
+  endDate: z.string().date().optional(),
   sortBy: z.enum(['createdAt', 'severity', 'status', 'title']).optional().default('createdAt'),
   sortOrder: z.enum(['asc', 'desc']).optional().default('desc'),
   page: z.coerce.number().int().positive().optional().default(1),

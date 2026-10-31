@@ -47,77 +47,77 @@ export const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#08090a] flex flex-col items-center justify-center p-4 selection:bg-[#5e6ad2]/30">
+    <div className="min-h-screen bg-[#111411] flex flex-col items-center justify-center p-4 selection:bg-[#a2aa83]/30">
       <div className="w-full max-w-sm space-y-4">
         {/* Brand Header */}
         <div className="text-center space-y-1">
-          <div className="inline-flex items-center justify-center w-8 h-8 rounded-[6px] bg-[#121316] border border-[#26282f] mb-2 shadow-subtle">
-            <span className="font-mono text-xs font-bold text-[#ededed]">IF</span>
+          <div className="inline-flex items-center justify-center w-8 h-8 rounded-[6px] bg-[#121316] border border-[#343c32] mb-2 shadow-subtle">
+            <span className="font-mono text-xs font-bold text-[#dce1d8]">IF</span>
           </div>
-          <h1 className="text-lg font-semibold text-[#f4f4f5] tracking-tight">
+          <h1 className="text-lg font-semibold text-[#e8ebe4] tracking-tight">
             Create IncidentFlow Account
           </h1>
-          <p className="text-xs text-[#71717a]">
+          <p className="text-xs text-[#818b7e]">
             Operator access for production incident triage
           </p>
         </div>
 
         {/* Register Card */}
-        <div className="bg-[#0d0e11] border border-[#1f2127] rounded-[6px] p-5 shadow-modal space-y-3.5">
+        <div className="bg-[#191d19] border border-[#30372f] rounded-[6px] p-5 shadow-modal space-y-3.5">
           <form onSubmit={handleSubmit} className="space-y-3">
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+              <label className="block text-[11px] font-medium uppercase tracking-wider text-[#818b7e] mb-1">
                 Full Name
               </label>
               <div className="relative">
-                <User className="w-3.5 h-3.5 text-[#71717a] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <User className="w-3.5 h-3.5 text-[#818b7e] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="text"
                   required
                   placeholder="Jordan Lee"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="w-full h-8 pl-8 pr-2.5 bg-[#08090a] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] placeholder-[#71717a] focus:outline-none transition-colors"
+                  className="w-full h-8 pl-8 pr-2.5 bg-[#111411] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs text-[#dce1d8] placeholder-[#818b7e] focus:outline-none transition-colors"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+              <label className="block text-[11px] font-medium uppercase tracking-wider text-[#818b7e] mb-1">
                 Work Email
               </label>
               <div className="relative">
-                <Mail className="w-3.5 h-3.5 text-[#71717a] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <Mail className="w-3.5 h-3.5 text-[#818b7e] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="email"
                   required
                   placeholder="jordan@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full h-8 pl-8 pr-2.5 bg-[#08090a] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] placeholder-[#71717a] focus:outline-none transition-colors"
+                  className="w-full h-8 pl-8 pr-2.5 bg-[#111411] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs text-[#dce1d8] placeholder-[#818b7e] focus:outline-none transition-colors"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+              <label className="block text-[11px] font-medium uppercase tracking-wider text-[#818b7e] mb-1">
                 Password
               </label>
               <div className="relative">
-                <Lock className="w-3.5 h-3.5 text-[#71717a] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                <Lock className="w-3.5 h-3.5 text-[#818b7e] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                 <input
                   type="password"
                   required
                   placeholder="At least 6 characters"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="w-full h-8 pl-8 pr-2.5 bg-[#08090a] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] placeholder-[#71717a] focus:outline-none transition-colors"
+                  className="w-full h-8 pl-8 pr-2.5 bg-[#111411] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs text-[#dce1d8] placeholder-[#818b7e] focus:outline-none transition-colors"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+              <label className="block text-[11px] font-medium uppercase tracking-wider text-[#818b7e] mb-1">
                 Platform Role
               </label>
               <div className="grid grid-cols-2 gap-2">
@@ -126,8 +126,8 @@ export const RegisterPage: React.FC = () => {
                   onClick={() => setRole('ENGINEER')}
                   className={`h-8 px-2 rounded-[5px] text-xs font-medium border transition-colors cursor-pointer ${
                     role === 'ENGINEER'
-                      ? 'bg-[#18191e] border-[#5e6ad2] text-[#f4f4f5]'
-                      : 'bg-[#08090a] border-[#1f2127] text-[#71717a] hover:text-[#ededed]'
+                      ? 'bg-[#242a23] border-[#a2aa83] text-[#e8ebe4]'
+                      : 'bg-[#111411] border-[#30372f] text-[#818b7e] hover:text-[#dce1d8]'
                   }`}
                 >
                   Engineer
@@ -137,8 +137,8 @@ export const RegisterPage: React.FC = () => {
                   onClick={() => setRole('ADMIN')}
                   className={`h-8 px-2 rounded-[5px] text-xs font-medium border transition-colors cursor-pointer ${
                     role === 'ADMIN'
-                      ? 'bg-[#18191e] border-[#5e6ad2] text-[#f4f4f5]'
-                      : 'bg-[#08090a] border-[#1f2127] text-[#71717a] hover:text-[#ededed]'
+                      ? 'bg-[#242a23] border-[#a2aa83] text-[#e8ebe4]'
+                      : 'bg-[#111411] border-[#30372f] text-[#818b7e] hover:text-[#dce1d8]'
                   }`}
                 >
                   Admin
@@ -159,9 +159,9 @@ export const RegisterPage: React.FC = () => {
         </div>
 
         {/* Footer Link */}
-        <p className="text-center text-xs text-[#71717a]">
+        <p className="text-center text-xs text-[#818b7e]">
           Already have an account?{' '}
-          <Link to="/login" className="text-[#ededed] hover:underline font-medium">
+          <Link to="/login" className="text-[#dce1d8] hover:underline font-medium">
             Sign in
           </Link>
         </p>

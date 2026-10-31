@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'react-router-dom';
 import { incidentsApi } from '../api/incidents';
 import { servicesApi } from '../api/services';
 import { IncidentTable } from '../components/incidents/IncidentTable';
@@ -10,10 +11,13 @@ import { Plus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { CreateIncidentModal } from '../components/incidents/CreateIncidentModal';
 
 export const IncidentsPage: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [search, setSearch] = useState('');
-  const [severity, setSeverity] = useState<Severity | undefined>();
-  const [status, setStatus] = useState<IncidentStatus | undefined>();
-  const [serviceId, setServiceId] = useState<string | undefined>();
+  const [severity, setSeverity] = useState<Severity | undefined>(() => searchParams.get('severity') as Severity | undefined);
+  const [status, setStatus] = useState<IncidentStatus | undefined>(() => searchParams.get('status') as IncidentStatus | undefined);
+  const [serviceId, setServiceId] = useState<string | undefined>(() => searchParams.get('serviceId') || undefined);
+  const [startDate, setStartDate] = useState<string | undefined>(() => searchParams.get('startDate') || undefined);
+  const [endDate, setEndDate] = useState<string | undefined>(() => searchParams.get('endDate') || undefined);
   const [page, setPage] = useState(1);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
@@ -25,13 +29,15 @@ export const IncidentsPage: React.FC = () => {
 
   // Fetch incidents list with live backend query
   const { data, isLoading } = useQuery({
-    queryKey: ['incidents', { search, severity, status, serviceId, page }],
+    queryKey: ['incidents', { search, severity, status, serviceId, startDate, endDate, page }],
     queryFn: () =>
       incidentsApi.list({
         search: search || undefined,
         severity,
         status,
         serviceId,
+        startDate,
+        endDate,
         page,
         limit: 15,
         sortBy: 'createdAt',
@@ -44,7 +50,10 @@ export const IncidentsPage: React.FC = () => {
     setSeverity(undefined);
     setStatus(undefined);
     setServiceId(undefined);
+    setStartDate(undefined);
+    setEndDate(undefined);
     setPage(1);
+    setSearchParams({});
   };
 
   const handleSearchChange = (val: string) => {
@@ -55,30 +64,39 @@ export const IncidentsPage: React.FC = () => {
   const handleSeverityChange = (val?: Severity) => {
     setSeverity(val);
     setPage(1);
+    const next = new URLSearchParams(searchParams);
+    val ? next.set('severity', val) : next.delete('severity');
+    setSearchParams(next, { replace: true });
   };
 
   const handleStatusChange = (val?: IncidentStatus) => {
     setStatus(val);
     setPage(1);
+    const next = new URLSearchParams(searchParams);
+    val ? next.set('status', val) : next.delete('status');
+    setSearchParams(next, { replace: true });
   };
 
   const handleServiceChange = (val?: string) => {
     setServiceId(val);
     setPage(1);
+    const next = new URLSearchParams(searchParams);
+    val ? next.set('serviceId', val) : next.delete('serviceId');
+    setSearchParams(next, { replace: true });
   };
 
   const incidents = data?.incidents || [];
-  const pagination = data?.pagination || { total: 0, page: 1, totalPages: 1 };
+  const pagination = data?.pagination || { total: 0, page: 1, limit: 15, totalPages: 1 };
 
   return (
     <div className="space-y-3">
       {/* Page Header */}
       <div className="flex items-center justify-between gap-4 pb-2">
         <div>
-          <h1 className="text-base font-semibold text-[#f4f4f5] tracking-tight">
+          <h1 className="text-base font-semibold text-[#e8ebe4] tracking-tight">
             Incidents
           </h1>
-          <p className="text-xs text-[#71717a] mt-0.5">
+          <p className="text-xs text-[#818b7e] mt-0.5">
             Prioritize, assign, and coordinate engineering triage workflows
           </p>
         </div>
@@ -106,6 +124,20 @@ export const IncidentsPage: React.FC = () => {
         onReset={handleResetFilters}
       />
 
+      <p className="text-xs text-[#818b7e]" aria-live="polite">
+        {isLoading ? 'Loading incident records…' : `Showing ${incidents.length ? (pagination.page - 1) * (pagination.limit || 15) + 1 : 0}–${Math.min(pagination.page * (pagination.limit || 15), pagination.total)} of ${pagination.total} incidents`}
+      </p>
+      {(startDate || endDate) && (
+        <div className="flex items-center gap-2 text-xs text-[#a5aea0]">
+          <span>Date range: {startDate || 'any'} to {endDate || 'any'}</span>
+          <button className="underline underline-offset-2" onClick={() => {
+            setStartDate(undefined); setEndDate(undefined);
+            const next = new URLSearchParams(searchParams); next.delete('startDate'); next.delete('endDate');
+            setSearchParams(next, { replace: true }); setPage(1);
+          }}>Clear</button>
+        </div>
+      )}
+
       {/* Incidents Table */}
       <IncidentTable
         incidents={incidents}
@@ -115,11 +147,11 @@ export const IncidentsPage: React.FC = () => {
 
       {/* Pagination Bar */}
       {pagination.totalPages > 1 && (
-        <div className="flex items-center justify-between px-1 pt-2 text-xs text-[#71717a]">
+        <div className="flex items-center justify-between px-1 pt-2 text-xs text-[#818b7e]">
           <span>
-            Page <span className="font-mono text-[#ededed]">{pagination.page}</span> of{' '}
-            <span className="font-mono text-[#ededed]">{pagination.totalPages}</span>{' '}
-            <span className="text-[#52525b]">({pagination.total} total)</span>
+            Page <span className="font-mono text-[#dce1d8]">{pagination.page}</span> of{' '}
+            <span className="font-mono text-[#dce1d8]">{pagination.totalPages}</span>{' '}
+            <span className="text-[#667061]">({pagination.total} total)</span>
           </span>
 
           <div className="flex items-center gap-1.5">

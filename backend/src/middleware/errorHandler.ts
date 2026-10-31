@@ -20,7 +20,12 @@ export const errorHandler = (
   }
 
   // Handle unexpected errors
-  console.error('Unhandled server error:', err);
+  console.error(JSON.stringify({
+    level: 'error',
+    event: 'http_unhandled_error',
+    requestId: String(_req.get('X-Request-ID') || ''),
+    errorName: err.name,
+  }));
 
   res.status(500).json({
     success: false,

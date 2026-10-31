@@ -35,10 +35,10 @@ export const ConfirmModal: React.FC<ConfirmModalProps> = ({
           </div>
         )}
         <div className="flex-1">
-          <p className="text-xs text-[#a1a1aa] leading-relaxed">{message}</p>
+          <p className="text-xs text-[#a5aea0] leading-relaxed">{message}</p>
         </div>
       </div>
-      <div className="mt-5 flex justify-end gap-2 pt-3 border-t border-[#1f2127]">
+      <div className="mt-5 flex justify-end gap-2 pt-3 border-t border-[#30372f]">
         <Button variant="secondary" size="sm" onClick={onClose} disabled={isLoading}>
           {cancelText}
         </Button>

@@ -55,7 +55,7 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
           const config = {
             success: {
               icon: <CheckCircle2 className="w-4 h-4 text-[#34d399] shrink-0" />,
-              border: 'border-[#1f2127]',
+              border: 'border-[#30372f]',
             },
             error: {
               icon: <XCircle className="w-4 h-4 text-[#f87171] shrink-0" />,
@@ -66,21 +66,21 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               border: 'border-amber-500/25',
             },
             info: {
-              icon: <Info className="w-4 h-4 text-[#818cf8] shrink-0" />,
-              border: 'border-[#1f2127]',
+              icon: <Info className="w-4 h-4 text-[#b2bc94] shrink-0" />,
+              border: 'border-[#30372f]',
             },
           }[toast.type];
 
           return (
             <div
               key={toast.id}
-              className={`pointer-events-auto flex items-center gap-2.5 p-2.5 rounded-[5px] border bg-[#111215] shadow-modal text-xs ${config.border}`}
+              className={`pointer-events-auto flex items-center gap-2.5 p-2.5 rounded-[5px] border bg-[#202520] shadow-modal text-xs ${config.border}`}
             >
               {config.icon}
-              <div className="flex-1 text-[#ededed] leading-snug">{toast.message}</div>
+              <div className="flex-1 text-[#dce1d8] leading-snug">{toast.message}</div>
               <button
                 onClick={() => removeToast(toast.id)}
-                className="text-[#71717a] hover:text-[#ededed] transition-colors shrink-0 p-0.5"
+                className="text-[#818b7e] hover:text-[#dce1d8] transition-colors shrink-0 p-0.5"
               >
                 <X className="w-3.5 h-3.5" />
               </button>

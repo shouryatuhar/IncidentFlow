@@ -34,7 +34,7 @@ services:
       DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres}@postgres:5432/${POSTGRES_DB:-incidentflow}?schema=public
       JWT_SECRET: ${JWT_SECRET:-development-jwt-secret-incidentflow-2026}
       JWT_EXPIRES_IN: "7d"
-      WEBHOOK_SECRET: ${WEBHOOK_SECRET:-incidentflow-whsec-supersecretkey123}
+      WEBHOOK_SECRET: ${WEBHOOK_SECRET:?Set WEBHOOK_SECRET in your local .env file}
 
   frontend:
     build:

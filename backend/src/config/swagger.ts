@@ -415,6 +415,13 @@ export const swaggerSpec = {
         summary: 'Automated monitoring webhook ingress (Datadog, Prometheus, Grafana, CloudWatch)',
         tags: ['Webhooks'],
         security: [{ WebhookSecretAuth: [] }],
+        parameters: [{
+          in: 'header',
+          name: 'Idempotency-Key',
+          required: false,
+          description: 'Stable provider event ID. Repeated deliveries return the original incident.',
+          schema: { type: 'string', maxLength: 200 },
+        }],
         requestBody: {
           required: true,
           content: {
@@ -423,6 +430,7 @@ export const swaggerSpec = {
                 type: 'object',
                 required: ['service', 'title', 'description', 'severity'],
                 properties: {
+                  eventId: { type: 'string', maxLength: 200, description: 'Optional provider event ID for retry-safe idempotency' },
                   service: { type: 'string', example: 'Payment API' },
                   title: { type: 'string', example: 'Payment API latency above threshold' },
                   description: { type: 'string', example: 'Average latency exceeded 2 seconds' },
@@ -434,6 +442,7 @@ export const swaggerSpec = {
         },
         responses: {
           201: { description: 'Incident created via webhook, auto-assigned to service owner' },
+          200: { description: 'Webhook event was already processed; returns the existing incident' },
           401: { description: 'Unauthorized: Missing or invalid x-webhook-secret header' },
           404: { description: 'Service not found in catalog' },
         },

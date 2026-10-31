@@ -79,6 +79,7 @@ model Incident {
   assignee    User?          @relation("AssignedIncidents", fields: [assigneeId], references: [id])
   startedAt   DateTime       @default(now())
   resolvedAt  DateTime?
+  sourceEventId String?        @unique
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
 

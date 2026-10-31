@@ -29,21 +29,21 @@ export const StatCard: React.FC<StatCardProps> = ({
   }[highlight];
 
   return (
-    <div className="bg-[#0d0e11] border border-[#1f2127] rounded-[6px] p-3.5 hover:border-[#2a2c34] transition-colors">
+    <div className="bg-[#191d19] border border-[#30372f] rounded-[6px] p-3.5 hover:border-[#3c453a] transition-colors">
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5">
           {highlight !== 'none' && (
             <span className={`w-1.5 h-1.5 rounded-full ${highlightDot} shrink-0`} />
           )}
-          <span className="text-[11px] font-medium uppercase tracking-wider text-[#71717a]">
+          <span className="text-[11px] font-medium uppercase tracking-wider text-[#818b7e]">
             {title}
           </span>
         </div>
-        {icon && <div className="text-[#71717a]">{icon}</div>}
+        {icon && <div className="text-[#818b7e]">{icon}</div>}
       </div>
 
       <div className="mt-2 flex items-baseline gap-2">
-        <span className="text-xl font-semibold tracking-tight text-[#f4f4f5] font-mono">
+        <span className="text-xl font-semibold tracking-tight text-[#e8ebe4] font-mono">
           {value}
         </span>
         {trend && (
@@ -58,7 +58,7 @@ export const StatCard: React.FC<StatCardProps> = ({
       </div>
 
       {subtitle && (
-        <p className="mt-1 text-[11px] text-[#71717a] truncate">{subtitle}</p>
+        <p className="mt-1 text-[11px] text-[#818b7e] truncate">{subtitle}</p>
       )}
     </div>
   );

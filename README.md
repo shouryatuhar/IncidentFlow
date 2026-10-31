@@ -63,7 +63,9 @@ Inspired by internal engineering operations tools like Linear and PagerDuty, Inc
 - **Frontend**: React 18 SPA built with Vite for fast HMR. UI state and caching managed with TanStack React Query v5. Styled with Tailwind CSS in an engineering-grade dark theme (`slate-950`/`slate-900`).
 - **Backend**: Express.js in strict TypeScript. Layered modular architecture separating routes, controllers, business services, and validation schemas.
 - **Database & ORM**: PostgreSQL with Prisma ORM providing compile-time type safety, relational foreign key constraints, cascade deletes, and migrations.
-- **Security**: Hardened with `helmet` HTTP headers, `express-rate-limit` against brute-force and DDoS, bcrypt password hashing, and signed JWT tokens.
+- **Security**: Hardened with `helmet` HTTP headers, request-size limits, API/auth/webhook rate limits, bcrypt password hashing, and signed JWT bearer tokens.
+- **Webhook reliability**: Optional provider event IDs or `Idempotency-Key` headers prevent duplicate incidents; incident and timeline writes commit atomically, including on concurrent retries.
+- **Operational visibility**: Every API response includes an `X-Request-ID`; structured request logs carry request/trace IDs, `/api/metrics` exposes route-level counts/errors/latency, and OpenTelemetry auto-instrumentation exports traces and metrics to an OTLP collector when configured.
 - **API Documentation**: Built-in interactive OpenAPI 3.0 / Swagger documentation mounted at `/api/docs`.
 
 ---
@@ -77,7 +79,7 @@ Inspired by internal engineering operations tools like Linear and PagerDuty, Inc
 | **Server State** | TanStack Query v5 | Automatic background refetching, caching, window focus revalidation, and mutation invalidation |
 | **Routing** | React Router v6 | Client-side routing with protected route middleware and session-aware navigation |
 | **Charts** | Recharts | Composable SVG data visualizations for MTTR, severity distributions, and incident volume |
-| **Backend Runtime** | Node.js (v20+) + Express | Mature, predictable event-driven runtime with low latency and clean middleware architecture |
+| **Backend Runtime** | Node.js (v24+) + Express | Mature, predictable event-driven runtime with low latency and clean middleware architecture |
 | **Type Safety** | TypeScript (Strict) | End-to-end type safety between database models, API payloads, and frontend state |
 | **Database ORM** | Prisma ORM v5 | Type-safe queries, migration engine, and schema synchronization |
 | **Database** | PostgreSQL 15 | Battle-tested relational database with ACID compliance and robust date-arithmetic for MTTR |
@@ -178,7 +180,9 @@ IncidentFlow/
 - **Recent Alerts**: Live feed of active production incidents.
 
 ### 5. Inbound Monitoring Webhook Ingress
-External monitoring systems (Datadog, Prometheus Alertmanager, Grafana, CloudWatch) can declare incidents automatically via `POST /api/webhooks/incidents`.
+External monitoring systems (Datadog, Prometheus Alertmanager, Grafana, CloudWatch) can declare incidents automatically via `POST /api/webhooks/incidents`. Include a stable provider event ID in the `Idempotency-Key` header (or `eventId` payload field) so retries return the existing incident rather than creating duplicates. Requests without an event ID preserve the original create-each-delivery behavior.
+
+For distributed traces and OpenTelemetry metrics, configure `OTEL_EXPORTER_OTLP_ENDPOINT` with an OTLP HTTP collector endpoint (for example, `http://localhost:4318`). Local route-level request summaries remain available at `GET /api/metrics` without a collector.
 - Authenticated via configurable `x-webhook-secret` header.
 - Validates payload with Zod schemas.
 - Resolves affected service by name or ID.
@@ -216,9 +220,9 @@ The specification details request bodies, query parameters, authorization requir
 A full CI workflow is configured in [`.github/workflows/ci.yml`](./.github/workflows/ci.yml):
 
 - **Service Container**: Automatically starts an isolated PostgreSQL 15 instance.
-- **Schema Migration**: Executes `prisma db push` to verify DDL scripts.
+- **Schema Migration**: Applies versioned Prisma migrations to a clean PostgreSQL database.
 - **Seeding**: Executes `db:seed` against test database.
-- **Test Suites**: Executes **all 33 automated tests** (28 backend integration tests + 8 frontend component tests).
+- **Test Suites**: Executes **all 40 automated tests** (32 backend integration tests + 8 frontend component tests).
 - **Production Build**: Compiles backend (`tsc`) and frontend (`vite build`) to guarantee zero compile-time regressions.
 
 ---
@@ -230,7 +234,7 @@ IncidentFlow includes an optional, realistic development seed script (`npm run d
 > [!IMPORTANT]
 > - **Zero Hardcoded Data**: The frontend application contains **no fake or hardcoded incidents, services, comments, timeline events, or metrics**. Every table row, chart data point, and badge is queried from PostgreSQL via REST APIs.
 > - **Demonstration Purpose**: All initial incidents (e.g. Stripe webhook timeouts, database connection pool exhaustion) and accounts (`admin@incidentflow.dev`, `engineer@incidentflow.dev`) are demo records.
-> - **Clean Production Start**: In production (`NODE_ENV=production`), the application boots with a clean schema and **never automatically executes the seed script**. If a clean, empty database is desired for local use, run `npx prisma db push` without running `npm run db:seed`. The UI will display empty states with call-to-action buttons.
+> - **Clean Production Start**: In production (`NODE_ENV=production`), the application boots with a clean schema and **never automatically executes the seed script**. For a clean, empty database, apply migrations with `npx prisma migrate deploy` without running `npm run db:seed`. The UI will display empty states with call-to-action buttons.
 > - **Re-seeding**: To reset the demo state at any time, execute `npm run db:seed` from the root directory.
 
 ### Seed Accounts (Local Development)
@@ -259,7 +263,7 @@ cp .env.example .env
 | `DATABASE_URL` | PostgreSQL connection string | `postgresql://postgres:postgres@localhost:5432/incidentflow?schema=public` |
 | `JWT_SECRET` | Secret key for signing session tokens | `development-jwt-secret-incidentflow-2026` |
 | `JWT_EXPIRES_IN` | Token validity period | `7d` |
-| `WEBHOOK_SECRET` | Secret token for `/api/webhooks/incidents` | `incidentflow-whsec-supersecretkey123` |
+| `WEBHOOK_SECRET` | Unique random secret (at least 32 characters) for `/api/webhooks/incidents`; required in production | Generate with `openssl rand -hex 32` and store only in server/provider secret stores |
 | `VITE_API_URL` | Frontend API URL base | `http://localhost:4000/api` |
 
 ---
@@ -267,7 +271,7 @@ cp .env.example .env
 ## Getting Started (Local Development)
 
 ### Prerequisites
-- Node.js v20+ and npm
+- Node.js v24+ and npm
 - PostgreSQL 15+ running locally (or via Docker)
 
 ### 1. Install Dependencies
@@ -279,7 +283,7 @@ npm install
 ### 2. Set Up Database
 
 ```bash
-# Push schema migrations to PostgreSQL
+# Apply versioned schema migrations to PostgreSQL
 npm run db:migrate
 
 # Seed demo users, services, and realistic incidents
@@ -319,7 +323,7 @@ Access:
 To seed initial data inside Docker:
 
 ```bash
-docker compose exec backend npx prisma db push
+docker compose exec backend npx prisma migrate deploy
 docker compose exec backend npm run db:seed
 ```
 
@@ -355,7 +359,7 @@ Simulate an alert from Datadog or Prometheus using `cURL`:
 ```bash
 curl -X POST "http://localhost:4000/api/webhooks/incidents" \
   -H "Content-Type: application/json" \
-  -H "x-webhook-secret: incidentflow-whsec-supersecretkey123" \
+  -H "x-webhook-secret: $WEBHOOK_SECRET" \
   -d '{
     "service": "Payment API",
     "title": "Payment API latency above threshold",

@@ -33,18 +33,19 @@ export const IncidentFilterBar: React.FC<IncidentFilterBarProps> = ({
     <div className="flex flex-wrap items-center gap-2 mb-3">
       {/* Search Input */}
       <div className="relative flex-1 min-w-[200px] max-w-md">
-        <Search className="w-3.5 h-3.5 text-[#71717a] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+        <Search className="w-3.5 h-3.5 text-[#818b7e] absolute left-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
         <input
           type="text"
+          aria-label="Search incidents"
           placeholder="Filter incidents by title or description..."
           value={search}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="w-full h-8 pl-8 pr-7 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#f4f4f5] placeholder-[#71717a] focus:outline-none transition-colors font-sans"
+          className="w-full h-8 pl-8 pr-7 bg-[#191d19] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs text-[#e8ebe4] placeholder-[#818b7e] focus:outline-none transition-colors font-sans"
         />
         {search && (
           <button
             onClick={() => onSearchChange('')}
-            className="absolute right-2 top-1/2 -translate-y-1/2 text-[#71717a] hover:text-[#f4f4f5]"
+            className="absolute right-2 top-1/2 -translate-y-1/2 text-[#818b7e] hover:text-[#e8ebe4]"
           >
             <X className="w-3.5 h-3.5" />
           </button>
@@ -54,9 +55,10 @@ export const IncidentFilterBar: React.FC<IncidentFilterBarProps> = ({
       {/* Severity Filter */}
       <div className="relative">
         <select
+          aria-label="Filter by severity"
           value={severity || ''}
           onChange={(e) => onSeverityChange(e.target.value ? (e.target.value as Severity) : undefined)}
-          className="h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs font-mono text-[#d4d4d8] focus:outline-none transition-colors cursor-pointer"
+          className="h-8 px-2.5 bg-[#191d19] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs font-mono text-[#c6cdc1] focus:outline-none transition-colors cursor-pointer"
         >
           <option value="">All Severities</option>
           <option value="SEV_1">SEV-1 Critical</option>
@@ -69,9 +71,10 @@ export const IncidentFilterBar: React.FC<IncidentFilterBarProps> = ({
       {/* Status Filter */}
       <div className="relative">
         <select
+          aria-label="Filter by status"
           value={status || ''}
           onChange={(e) => onStatusChange(e.target.value ? (e.target.value as IncidentStatus) : undefined)}
-          className="h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#d4d4d8] focus:outline-none transition-colors cursor-pointer"
+          className="h-8 px-2.5 bg-[#191d19] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs text-[#c6cdc1] focus:outline-none transition-colors cursor-pointer"
         >
           <option value="">All Statuses</option>
           <option value="INVESTIGATING">Investigating</option>
@@ -84,9 +87,10 @@ export const IncidentFilterBar: React.FC<IncidentFilterBarProps> = ({
       {/* Service Filter */}
       <div className="relative">
         <select
+          aria-label="Filter by service"
           value={serviceId || ''}
           onChange={(e) => onServiceIdChange(e.target.value ? e.target.value : undefined)}
-          className="h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#d4d4d8] focus:outline-none transition-colors max-w-[160px] truncate cursor-pointer"
+          className="h-8 px-2.5 bg-[#191d19] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs text-[#c6cdc1] focus:outline-none transition-colors max-w-[160px] truncate cursor-pointer"
         >
           <option value="">All Services</option>
           {services.map((svc) => (
@@ -101,9 +105,9 @@ export const IncidentFilterBar: React.FC<IncidentFilterBarProps> = ({
       {hasActiveFilters && (
         <button
           onClick={onReset}
-          className="h-8 flex items-center gap-1.5 px-2.5 text-xs text-[#a1a1aa] hover:text-[#f4f4f5] bg-[#15161a] hover:bg-[#1f2026] rounded-[5px] border border-[#26282f] transition-colors cursor-pointer"
+          className="h-8 flex items-center gap-1.5 px-2.5 text-xs text-[#a5aea0] hover:text-[#e8ebe4] bg-[#252b25] hover:bg-[#1f2026] rounded-[5px] border border-[#343c32] transition-colors cursor-pointer"
         >
-          <RotateCcw className="w-3 h-3 text-[#71717a]" />
+          <RotateCcw className="w-3 h-3 text-[#818b7e]" />
           <span>Reset</span>
         </button>
       )}

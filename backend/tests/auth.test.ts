@@ -92,4 +92,30 @@ describe('Authentication API', () => {
     expect(res.status).toBe(401);
     expect(res.body.success).toBe(false);
   });
+
+  it('should reject malformed bearer tokens', async () => {
+    const res = await request(app)
+      .get('/api/auth/me')
+      .set('Authorization', 'Bearer not-a-jwt');
+
+    expect(res.status).toBe(401);
+    expect(res.body.success).toBe(false);
+  });
+
+  it('should expose a request ID for tracing an API response', async () => {
+    const res = await request(app).get('/api/health');
+
+    expect(res.status).toBe(200);
+    expect(res.headers['x-request-id']).toMatch(/^[0-9a-f-]{36}$/i);
+  });
+
+  it('should expose bounded route-level request metrics', async () => {
+    await request(app).get('/api/health');
+    const res = await request(app).get('/api/metrics');
+
+    expect(res.status).toBe(200);
+    expect(res.body.requests).toEqual(expect.arrayContaining([
+      expect.objectContaining({ route: 'GET /api/health 200', requests: expect.any(Number) }),
+    ]));
+  });
 });

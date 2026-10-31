@@ -9,7 +9,7 @@ import { IncidentStatus, Prisma } from '@prisma/client';
 
 export class IncidentsService {
   static async list(query: QueryIncidentsInput) {
-    const { search, severity, status, serviceId, sortBy, sortOrder, page, limit } = query;
+    const { search, severity, status, serviceId, startDate, endDate, sortBy, sortOrder, page, limit } = query;
 
     const where: Prisma.IncidentWhereInput = {};
 
@@ -23,6 +23,13 @@ export class IncidentsService {
 
     if (serviceId) {
       where.serviceId = serviceId;
+    }
+
+    if (startDate || endDate) {
+      where.createdAt = {
+        ...(startDate ? { gte: new Date(`${startDate}T00:00:00.000Z`) } : {}),
+        ...(endDate ? { lte: new Date(`${endDate}T23:59:59.999Z`) } : {}),
+      };
     }
 
     if (search && search.trim() !== '') {

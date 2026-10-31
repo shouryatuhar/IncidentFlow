@@ -22,19 +22,19 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
   const hasActiveIncidents = (service.activeIncidentsCount || 0) > 0;
 
   return (
-    <div className="bg-[#0d0e11] border border-[#1f2127] rounded-[6px] p-3.5 hover:border-[#2a2c34] transition-colors flex flex-col justify-between group">
+    <div className="bg-[#191d19] border border-[#30372f] rounded-[6px] p-3.5 hover:border-[#3c453a] transition-colors flex flex-col justify-between group">
       <div>
         {/* Top bar with Service Name and Status Badge */}
         <div className="flex items-start justify-between gap-2.5 mb-2">
           <div className="flex items-center gap-2">
-            <div className="p-1 rounded-[4px] bg-[#15161a] border border-[#22242a] text-[#71717a] group-hover:text-[#ededed] transition-colors">
+            <div className="p-1 rounded-[4px] bg-[#252b25] border border-[#2e352d] text-[#818b7e] group-hover:text-[#dce1d8] transition-colors">
               <Server className="w-3.5 h-3.5" />
             </div>
             <div>
-              <h3 className="text-xs font-semibold text-[#ededed] tracking-tight">
+              <h3 className="text-xs font-semibold text-[#dce1d8] tracking-tight">
                 {service.name}
               </h3>
-              <p className="text-[10px] font-mono text-[#71717a]">
+              <p className="text-[10px] font-mono text-[#818b7e]">
                 {service.owner?.name || 'Platform Team'}
               </p>
             </div>
@@ -43,13 +43,13 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
         </div>
 
         {/* Description */}
-        <p className="text-[11px] text-[#71717a] line-clamp-2 my-2 leading-relaxed">
+        <p className="text-[11px] text-[#818b7e] line-clamp-2 my-2 leading-relaxed">
           {service.description}
         </p>
       </div>
 
       {/* Footer info & Admin controls */}
-      <div className="pt-2.5 border-t border-[#1f2127] flex items-center justify-between text-xs">
+      <div className="pt-2.5 border-t border-[#30372f] flex items-center justify-between text-xs">
         <div>
           {hasActiveIncidents ? (
             <button
@@ -60,7 +60,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
               {service.activeIncidentsCount} active incident{service.activeIncidentsCount! > 1 ? 's' : ''}
             </button>
           ) : (
-            <span className="text-[#52525b] font-mono text-[10px]">
+            <span className="text-[#667061] font-mono text-[10px]">
               {service.totalIncidents || 0} total incidents
             </span>
           )}
@@ -71,7 +71,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
             <Button
               variant="ghost"
               size="sm"
-              className="p-1 h-6 text-[#71717a] hover:text-[#ededed]"
+              className="p-1 h-6 text-[#818b7e] hover:text-[#dce1d8]"
               onClick={() => onEdit(service)}
               title="Edit service"
             >
@@ -80,7 +80,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
             <Button
               variant="ghost"
               size="sm"
-              className="p-1 h-6 text-[#71717a] hover:text-[#f87171]"
+              className="p-1 h-6 text-[#818b7e] hover:text-[#f87171]"
               onClick={() => onDelete(service)}
               title="Delete service"
             >

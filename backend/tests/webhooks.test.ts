@@ -10,7 +10,7 @@ const app = createApp();
 describe('Webhook Ingress API', () => {
   let adminUser: any;
   let paymentService: any;
-  let createdIncidentId: string;
+  const createdIncidentIds: string[] = [];
 
   beforeAll(async () => {
     const passwordHash = await bcrypt.hash('Password123!', 10);
@@ -36,8 +36,8 @@ describe('Webhook Ingress API', () => {
   });
 
   afterAll(async () => {
-    if (createdIncidentId) {
-      await prisma.incident.deleteMany({ where: { id: createdIncidentId } });
+    if (createdIncidentIds.length) {
+      await prisma.incident.deleteMany({ where: { id: { in: createdIncidentIds } } });
     }
     if (paymentService) {
       await prisma.service.deleteMany({ where: { id: paymentService.id } });
@@ -118,7 +118,7 @@ describe('Webhook Ingress API', () => {
     expect(res.body.success).toBe(true);
     expect(res.body.data.title).toBe('Payment API latency above threshold');
     expect(res.body.data.service.id).toBe(paymentService.id);
-    createdIncidentId = res.body.data.id;
+    createdIncidentIds.push(res.body.data.id);
 
     // Verify timeline event was persisted in PostgreSQL
     const timelineEvents = await prisma.timelineEvent.findMany({
@@ -126,5 +126,33 @@ describe('Webhook Ingress API', () => {
     });
     expect(timelineEvents.length).toBeGreaterThanOrEqual(1);
     expect(timelineEvents[0].type).toBe('CREATED');
+  });
+
+  it('should return the same incident when a provider retries an event ID', async () => {
+    const eventId = `provider-event-${Date.now()}`;
+    const payload = {
+      service: paymentService.name,
+      title: 'Retry-safe payment alert',
+      description: 'Provider retried delivery after a timeout',
+      severity: 'SEV_2',
+    };
+
+    const first = await request(app)
+      .post('/api/webhooks/incidents')
+      .set('x-webhook-secret', ENV.WEBHOOK_SECRET)
+      .set('Idempotency-Key', eventId)
+      .send(payload);
+    const retry = await request(app)
+      .post('/api/webhooks/incidents')
+      .set('x-webhook-secret', ENV.WEBHOOK_SECRET)
+      .set('Idempotency-Key', eventId)
+      .send(payload);
+
+    expect(first.status).toBe(201);
+    expect(first.body.meta.duplicate).toBe(false);
+    expect(retry.status).toBe(200);
+    expect(retry.body.meta.duplicate).toBe(true);
+    expect(retry.body.data.id).toBe(first.body.data.id);
+    createdIncidentIds.push(first.body.data.id);
   });
 });

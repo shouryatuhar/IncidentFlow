@@ -8,7 +8,7 @@ interface BadgeProps {
 
 export const Badge: React.FC<BadgeProps> = ({ children, className = '' }) => (
   <span
-    className={`inline-flex items-center px-1.5 py-0.5 rounded-[4px] text-[11px] font-medium border border-[#22242a] bg-[#121316] text-[#a1a1aa] tracking-tight font-mono ${className}`}
+    className={`inline-flex items-center px-1.5 py-0.5 rounded-[4px] text-[11px] font-medium border border-[#2e352d] bg-[#121316] text-[#a5aea0] tracking-tight font-mono ${className}`}
   >
     {children}
   </span>
@@ -42,7 +42,7 @@ export const SeverityBadge: React.FC<{ severity: Severity; className?: string }>
     },
     SEV_4: {
       label: 'SEV-4 Low',
-      text: 'text-[#94a3b8]',
+      text: 'text-[#a5aea0]',
       bg: 'bg-slate-500/[0.08]',
       border: 'border-slate-500/25',
       dot: 'bg-[#64748b]',
@@ -75,17 +75,17 @@ export const StatusBadge: React.FC<{ status: IncidentStatus; className?: string 
     },
     IDENTIFIED: {
       label: 'Identified',
-      text: 'text-[#818cf8]',
-      bg: 'bg-indigo-500/[0.08]',
-      border: 'border-indigo-500/25',
-      dot: 'bg-[#6366f1]',
+      text: 'text-[#b2bc94]',
+      bg: 'bg-[#a2aa83]/[0.08]',
+      border: 'border-[#a2aa83]/25',
+      dot: 'bg-[#899477]',
     },
     MONITORING: {
       label: 'Monitoring',
-      text: 'text-[#c084fc]',
-      bg: 'bg-purple-500/[0.08]',
-      border: 'border-purple-500/25',
-      dot: 'bg-[#a855f7]',
+      text: 'text-[#d2dac2]',
+      bg: 'bg-[#a2aa83]/[0.08]',
+      border: 'border-[#a2aa83]/25',
+      dot: 'bg-[#899477]',
     },
     RESOLVED: {
       label: 'Resolved',

@@ -1,5 +1,6 @@
-import { createApp } from './app';
 import { ENV } from './config/env';
+import { shutdownTelemetry } from './instrumentation';
+import { createApp } from './app';
 import { prisma } from './config/prisma';
 
 const app = createApp();
@@ -15,6 +16,7 @@ const server = app.listen(ENV.PORT, () => {
 const gracefulShutdown = async () => {
   console.log('\nGracefully shutting down IncidentFlow server...');
   server.close(async () => {
+    await shutdownTelemetry();
     await prisma.$disconnect();
     console.log('Database disconnected. Server stopped.');
     process.exit(0);

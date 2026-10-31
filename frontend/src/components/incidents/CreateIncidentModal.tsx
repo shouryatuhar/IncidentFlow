@@ -99,7 +99,7 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
       <form onSubmit={handleSubmit} className="space-y-3.5">
         {/* Title */}
         <div>
-          <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+          <label className="block text-[11px] font-medium uppercase tracking-wider text-[#818b7e] mb-1">
             Incident Title <span className="text-[#f87171]">*</span>
           </label>
           <input
@@ -108,20 +108,20 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
             placeholder="e.g. Auth API 504 gateway timeout on login"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="w-full h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] placeholder-[#71717a] focus:outline-none transition-colors"
+            className="w-full h-8 px-2.5 bg-[#191d19] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs text-[#dce1d8] placeholder-[#818b7e] focus:outline-none transition-colors"
           />
         </div>
 
         {/* Severity & Affected Service row */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+            <label className="block text-[11px] font-medium uppercase tracking-wider text-[#818b7e] mb-1">
               Severity Level <span className="text-[#f87171]">*</span>
             </label>
             <select
               value={severity}
               onChange={(e) => setSeverity(e.target.value as Severity)}
-              className="w-full h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] focus:outline-none transition-colors font-mono cursor-pointer"
+              className="w-full h-8 px-2.5 bg-[#191d19] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs text-[#dce1d8] focus:outline-none transition-colors font-mono cursor-pointer"
             >
               <option value="SEV_1">SEV-1 (Critical Outage)</option>
               <option value="SEV_2">SEV-2 (Major Impact)</option>
@@ -131,13 +131,13 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+            <label className="block text-[11px] font-medium uppercase tracking-wider text-[#818b7e] mb-1">
               Affected Service <span className="text-[#f87171]">*</span>
             </label>
             <select
               value={serviceId}
               onChange={(e) => setServiceId(e.target.value)}
-              className="w-full h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] focus:outline-none transition-colors cursor-pointer"
+              className="w-full h-8 px-2.5 bg-[#191d19] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs text-[#dce1d8] focus:outline-none transition-colors cursor-pointer"
               required
             >
               {services.map((svc) => (
@@ -151,13 +151,13 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
 
         {/* Assignee */}
         <div>
-          <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+          <label className="block text-[11px] font-medium uppercase tracking-wider text-[#818b7e] mb-1">
             Initial Assignee
           </label>
           <select
             value={assigneeId}
             onChange={(e) => setAssigneeId(e.target.value)}
-            className="w-full h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] focus:outline-none transition-colors cursor-pointer"
+            className="w-full h-8 px-2.5 bg-[#191d19] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs text-[#dce1d8] focus:outline-none transition-colors cursor-pointer"
           >
             <option value="">-- Unassigned --</option>
             {users.map((u) => (
@@ -170,7 +170,7 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
 
         {/* Description */}
         <div>
-          <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+          <label className="block text-[11px] font-medium uppercase tracking-wider text-[#818b7e] mb-1">
             Description & Impact <span className="text-[#f87171]">*</span>
           </label>
           <textarea
@@ -179,12 +179,12 @@ export const CreateIncidentModal: React.FC<CreateIncidentModalProps> = ({
             placeholder="Describe what symptoms are being observed, error rates, regions affected, and initial mitigation steps..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] placeholder-[#71717a] focus:outline-none transition-colors resize-none leading-relaxed"
+            className="w-full p-2.5 bg-[#191d19] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs text-[#dce1d8] placeholder-[#818b7e] focus:outline-none transition-colors resize-none leading-relaxed"
           />
         </div>
 
         {/* Modal Actions */}
-        <div className="mt-4 flex items-center justify-end gap-2 pt-3 border-t border-[#1f2127]">
+        <div className="mt-4 flex items-center justify-end gap-2 pt-3 border-t border-[#30372f]">
           <Button variant="secondary" size="sm" type="button" onClick={onClose} disabled={createMutation.isPending}>
             Cancel
           </Button>

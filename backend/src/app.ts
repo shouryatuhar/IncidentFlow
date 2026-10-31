@@ -12,6 +12,7 @@ import analyticsRoutes from './modules/analytics/analytics.routes';
 import webhooksRoutes from './modules/webhooks/webhooks.routes';
 import { errorHandler } from './middleware/errorHandler';
 import { NotFoundError } from './utils/errors';
+import { requestObservability, getHttpMetrics } from './middleware/observability';
 
 export const createApp = () => {
   const app = express();
@@ -24,11 +25,12 @@ export const createApp = () => {
     cors({
       origin: '*',
       methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
-      allowedHeaders: ['Content-Type', 'Authorization', 'x-webhook-secret'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'x-webhook-secret', 'Idempotency-Key', 'x-event-id'],
     })
   );
 
-  app.use(express.json());
+  app.use(requestObservability);
+  app.use(express.json({ limit: '64kb' }));
 
   // General API Rate Limiter: 120 requests per minute
   const apiLimiter = rateLimit({
@@ -67,6 +69,9 @@ export const createApp = () => {
       timestamp: new Date().toISOString(),
     });
   });
+  app.get('/api/metrics', (_req, res) => {
+    res.status(200).json(getHttpMetrics());
+  });
 
   // Swagger / OpenAPI Interactive Documentation
   app.use(
@@ -88,7 +93,14 @@ export const createApp = () => {
   app.use('/api/services', servicesRoutes);
   app.use('/api/incidents', incidentsRoutes);
   app.use('/api/analytics', analyticsRoutes);
-  app.use('/api/webhooks', webhooksRoutes);
+  const webhookLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 60,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { success: false, error: { message: 'Webhook rate limit exceeded.' } },
+  });
+  app.use('/api/webhooks', webhookLimiter, webhooksRoutes);
 
   // 404 Route handler
   app.use((_req, _res, next) => {

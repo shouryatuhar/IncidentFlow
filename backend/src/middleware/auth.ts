@@ -34,9 +34,13 @@ export const authenticate = async (
     const token = authHeader.split(' ')[1];
     let payload: any;
     try {
-      payload = jwt.verify(token, ENV.JWT_SECRET);
+      payload = jwt.verify(token, ENV.JWT_SECRET, { algorithms: ['HS256'] });
     } catch (err) {
       throw new UnauthorizedError('Invalid or expired authentication token');
+    }
+
+    if (!payload || typeof payload !== 'object' || typeof payload.userId !== 'string') {
+      throw new UnauthorizedError('Invalid authentication token payload');
     }
 
     const user = await prisma.user.findUnique({

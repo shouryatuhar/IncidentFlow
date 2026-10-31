@@ -13,6 +13,8 @@ export interface QueryIncidentsParams {
   severity?: Severity;
   status?: IncidentStatus;
   serviceId?: string;
+  startDate?: string;
+  endDate?: string;
   sortBy?: 'createdAt' | 'severity' | 'status' | 'title';
   sortOrder?: 'asc' | 'desc';
   page?: number;
@@ -48,6 +50,8 @@ export const incidentsApi = {
     if (params.severity) query.append('severity', params.severity);
     if (params.status) query.append('status', params.status);
     if (params.serviceId) query.append('serviceId', params.serviceId);
+    if (params.startDate) query.append('startDate', params.startDate);
+    if (params.endDate) query.append('endDate', params.endDate);
     if (params.sortBy) query.append('sortBy', params.sortBy);
     if (params.sortOrder) query.append('sortOrder', params.sortOrder);
     if (params.page) query.append('page', params.page.toString());

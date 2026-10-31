@@ -98,7 +98,7 @@ export const ServiceModal: React.FC<ServiceModalProps> = ({
     >
       <form onSubmit={handleSubmit} className="space-y-3.5">
         <div>
-          <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+          <label className="block text-[11px] font-medium uppercase tracking-wider text-[#818b7e] mb-1">
             Service Name <span className="text-[#f87171]">*</span>
           </label>
           <input
@@ -107,12 +107,12 @@ export const ServiceModal: React.FC<ServiceModalProps> = ({
             placeholder="e.g. Auth Gateway"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] placeholder-[#71717a] focus:outline-none transition-colors"
+            className="w-full h-8 px-2.5 bg-[#191d19] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs text-[#dce1d8] placeholder-[#818b7e] focus:outline-none transition-colors"
           />
         </div>
 
         <div>
-          <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+          <label className="block text-[11px] font-medium uppercase tracking-wider text-[#818b7e] mb-1">
             Description <span className="text-[#f87171]">*</span>
           </label>
           <textarea
@@ -121,19 +121,19 @@ export const ServiceModal: React.FC<ServiceModalProps> = ({
             placeholder="Brief overview of functionality, SLA tier, and dependencies..."
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full p-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] placeholder-[#71717a] focus:outline-none transition-colors resize-none leading-relaxed"
+            className="w-full p-2.5 bg-[#191d19] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs text-[#dce1d8] placeholder-[#818b7e] focus:outline-none transition-colors resize-none leading-relaxed"
           />
         </div>
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+            <label className="block text-[11px] font-medium uppercase tracking-wider text-[#818b7e] mb-1">
               Current Health Status
             </label>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as ServiceStatus)}
-              className="w-full h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] focus:outline-none transition-colors cursor-pointer"
+              className="w-full h-8 px-2.5 bg-[#191d19] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs text-[#dce1d8] focus:outline-none transition-colors cursor-pointer"
             >
               <option value="OPERATIONAL">Operational</option>
               <option value="DEGRADED">Degraded</option>
@@ -142,13 +142,13 @@ export const ServiceModal: React.FC<ServiceModalProps> = ({
           </div>
 
           <div>
-            <label className="block text-[11px] font-medium uppercase tracking-wider text-[#71717a] mb-1">
+            <label className="block text-[11px] font-medium uppercase tracking-wider text-[#818b7e] mb-1">
               Owner / Lead Engineer
             </label>
             <select
               value={ownerId}
               onChange={(e) => setOwnerId(e.target.value)}
-              className="w-full h-8 px-2.5 bg-[#0d0e11] border border-[#1f2127] hover:border-[#2a2c34] focus:border-[#5e6ad2] rounded-[5px] text-xs text-[#ededed] focus:outline-none transition-colors cursor-pointer"
+              className="w-full h-8 px-2.5 bg-[#191d19] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs text-[#dce1d8] focus:outline-none transition-colors cursor-pointer"
             >
               {users.map((u) => (
                 <option key={u.id} value={u.id}>
@@ -159,7 +159,7 @@ export const ServiceModal: React.FC<ServiceModalProps> = ({
           </div>
         </div>
 
-        <div className="mt-4 flex items-center justify-end gap-2 pt-3 border-t border-[#1f2127]">
+        <div className="mt-4 flex items-center justify-end gap-2 pt-3 border-t border-[#30372f]">
           <Button variant="secondary" size="sm" type="button" onClick={onClose} disabled={saveMutation.isPending}>
             Cancel
           </Button>

@@ -64,10 +64,10 @@ export const ServicesPage: React.FC = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
         <div>
-          <h1 className="text-base font-semibold text-[#f4f4f5] tracking-tight">
+          <h1 className="text-base font-semibold text-[#e8ebe4] tracking-tight">
             Service Catalog & Health
           </h1>
-          <p className="text-xs text-[#71717a] mt-0.5">
+          <p className="text-xs text-[#818b7e] mt-0.5">
             Registered microservices, infrastructure components, and operational statuses
           </p>
         </div>
@@ -76,7 +76,7 @@ export const ServicesPage: React.FC = () => {
           <Button
             variant="secondary"
             size="sm"
-            leftIcon={<Plus className="w-3.5 h-3.5 text-[#5e6ad2]" />}
+            leftIcon={<Plus className="w-3.5 h-3.5 text-[#a2aa83]" />}
             onClick={handleCreate}
           >
             Register Service
@@ -85,33 +85,33 @@ export const ServicesPage: React.FC = () => {
       </div>
 
       {/* Health Overview Strip */}
-      <div className="grid grid-cols-3 bg-[#0d0e11] border border-[#1f2127] rounded-[6px] divide-x divide-[#1f2127]">
+      <div className="grid grid-cols-3 bg-[#191d19] border border-[#30372f] rounded-[6px] divide-x divide-[#30372f]">
         <div className="p-3">
-          <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-[#71717a]">
+          <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-[#818b7e]">
             <span className="w-1.5 h-1.5 rounded-full bg-[#10b981]" />
             Operational
           </div>
-          <p className="text-lg font-semibold text-[#f4f4f5] font-mono mt-1">
+          <p className="text-lg font-semibold text-[#e8ebe4] font-mono mt-1">
             {operationalCount}
           </p>
         </div>
 
         <div className="p-3">
-          <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-[#71717a]">
+          <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-[#818b7e]">
             <span className="w-1.5 h-1.5 rounded-full bg-[#f59e0b]" />
             Degraded
           </div>
-          <p className="text-lg font-semibold text-[#f4f4f5] font-mono mt-1">
+          <p className="text-lg font-semibold text-[#e8ebe4] font-mono mt-1">
             {degradedCount}
           </p>
         </div>
 
         <div className="p-3">
-          <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-[#71717a]">
+          <div className="flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-wider text-[#818b7e]">
             <span className="w-1.5 h-1.5 rounded-full bg-[#ef4444]" />
             Down
           </div>
-          <p className="text-lg font-semibold text-[#f4f4f5] font-mono mt-1">
+          <p className="text-lg font-semibold text-[#e8ebe4] font-mono mt-1">
             {downCount}
           </p>
         </div>
@@ -119,7 +119,7 @@ export const ServicesPage: React.FC = () => {
 
       {/* Services Table */}
       {isLoading ? (
-        <div className="bg-[#0d0e11] border border-[#1f2127] rounded-[6px] p-8">
+        <div className="bg-[#191d19] border border-[#30372f] rounded-[6px] p-8">
           <LoadingSpinner message="Loading registered service inventory..." />
         </div>
       ) : services.length === 0 ? (
@@ -135,10 +135,10 @@ export const ServicesPage: React.FC = () => {
           }
         />
       ) : (
-        <div className="bg-[#0d0e11] border border-[#1f2127] rounded-[6px] overflow-hidden">
+        <div className="bg-[#191d19] border border-[#30372f] rounded-[6px] overflow-hidden">
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs text-[#a1a1aa]">
-              <thead className="bg-[#0d0e11] border-b border-[#1f2127] text-[11px] font-medium text-[#71717a] uppercase tracking-wider font-mono">
+            <table className="w-full text-left text-xs text-[#a5aea0]">
+              <thead className="bg-[#191d19] border-b border-[#30372f] text-[11px] font-medium text-[#818b7e] uppercase tracking-wider font-mono">
                 <tr>
                   <th scope="col" className="px-3.5 py-2.5">
                     Service
@@ -159,19 +159,19 @@ export const ServicesPage: React.FC = () => {
                   )}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#17181d]">
+              <tbody className="divide-y divide-[#252b24]">
                 {services.map((svc) => (
                   <tr key={svc.id} className="hover:bg-[#121316] transition-colors group">
                     <td className="px-3.5 py-2.5">
                       <div className="flex items-center gap-2">
-                        <div className="p-1 rounded-[4px] bg-[#15161a] border border-[#22242a] text-[#71717a] shrink-0">
+                        <div className="p-1 rounded-[4px] bg-[#252b25] border border-[#2e352d] text-[#818b7e] shrink-0">
                           <Server className="w-3.5 h-3.5" />
                         </div>
                         <div>
-                          <span className="font-medium text-[#ededed] block">
+                          <span className="font-medium text-[#dce1d8] block">
                             {svc.name}
                           </span>
-                          <span className="text-[11px] text-[#71717a] line-clamp-1 max-w-sm">
+                          <span className="text-[11px] text-[#818b7e] line-clamp-1 max-w-sm">
                             {svc.description}
                           </span>
                         </div>
@@ -182,8 +182,8 @@ export const ServicesPage: React.FC = () => {
                       <ServiceStatusBadge status={svc.status} />
                     </td>
 
-                    <td className="px-3.5 py-2.5 whitespace-nowrap text-xs text-[#d4d4d8]">
-                      {svc.owner?.name || <span className="text-[#71717a] italic">Platform Team</span>}
+                    <td className="px-3.5 py-2.5 whitespace-nowrap text-xs text-[#c6cdc1]">
+                      {svc.owner?.name || <span className="text-[#818b7e] italic">Platform Team</span>}
                     </td>
 
                     <td className="px-3.5 py-2.5 whitespace-nowrap">
@@ -196,7 +196,7 @@ export const ServicesPage: React.FC = () => {
                           {svc.activeIncidentsCount} active
                         </button>
                       ) : (
-                        <span className="text-[#71717a] font-mono text-[11px]">
+                        <span className="text-[#818b7e] font-mono text-[11px]">
                           0 active
                         </span>
                       )}
@@ -208,7 +208,7 @@ export const ServicesPage: React.FC = () => {
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="p-1 h-6 text-[#71717a] hover:text-[#ededed]"
+                            className="p-1 h-6 text-[#818b7e] hover:text-[#dce1d8]"
                             onClick={() => handleEdit(svc)}
                             title="Edit service"
                           >
@@ -217,7 +217,7 @@ export const ServicesPage: React.FC = () => {
                           <Button
                             variant="ghost"
                             size="sm"
-                            className="p-1 h-6 text-[#71717a] hover:text-[#f87171]"
+                            className="p-1 h-6 text-[#818b7e] hover:text-[#f87171]"
                             onClick={() => setServiceToDelete(svc)}
                             title="Delete service"
                           >
