@@ -83,7 +83,7 @@ describe('Incident Components', () => {
       />
     );
 
-    expect(screen.getByPlaceholderText(/Search incidents by title or description/i)).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: 'Search incidents' })).toBeInTheDocument();
     expect(screen.getByText('All Severities')).toBeInTheDocument();
     expect(screen.getByText('All Statuses')).toBeInTheDocument();
     expect(screen.getByText('All Services')).toBeInTheDocument();
