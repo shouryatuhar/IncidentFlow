@@ -1,6 +1,6 @@
 # IncidentFlow
 
-> **A modern full-stack DevOps incident management platform for engineering teams.**
+> **A DevOps incident management platform for engineering teams.**
 
 [![IncidentFlow CI](https://github.com/shouryatuhar/IncidentFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/shouryatuhar/IncidentFlow/actions)
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-success?style=flat&logo=vercel)](https://frontend-murex-omega-87.vercel.app)
