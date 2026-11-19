@@ -3,8 +3,8 @@
 > **A DevOps incident management platform for engineering teams.**
 
 [![IncidentFlow CI](https://github.com/shouryatuhar/IncidentFlow/actions/workflows/ci.yml/badge.svg)](https://github.com/shouryatuhar/IncidentFlow/actions)
-[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-success?style=flat&logo=vercel)](https://frontend-murex-omega-87.vercel.app)
-[![API Docs](https://img.shields.io/badge/OpenAPI-Swagger%203.0-blue?style=flat&logo=swagger)](http://localhost:4000/api/docs)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Vercel-success?style=flat&logo=vercel)](https://incidentflowsthr.vercel.app)
+[![API Docs](https://img.shields.io/badge/OpenAPI-Swagger%203.0-blue?style=flat&logo=swagger)](https://backend-pink-gamma-zqtni7yani.vercel.app/api/docs)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 IncidentFlow allows software engineering teams to declare, track, triage, investigate, and resolve production incidents with real-time timelines, status workflows, role-based access control, automated external monitoring webhooks, and reliability analytics.
@@ -20,7 +20,7 @@ Inspired by internal engineering operations tools like Linear and PagerDuty, Inc
 - **Live Interactive Swagger UI**: [https://backend-pink-gamma-zqtni7yani.vercel.app/api/docs](https://backend-pink-gamma-zqtni7yani.vercel.app/api/docs)
 - **Live OpenAPI 3.0 JSON Spec**: [https://backend-pink-gamma-zqtni7yani.vercel.app/api/docs.json](https://backend-pink-gamma-zqtni7yani.vercel.app/api/docs.json)
 - **Live Health Probe**: [https://backend-pink-gamma-zqtni7yani.vercel.app/api/health](https://backend-pink-gamma-zqtni7yani.vercel.app/api/health)
-- **Cloud Database**: Managed PostgreSQL via Neon (AWS us-east-2) with SSL encryption
+- **Cloud Database**: PostgreSQL configured through the backend's `DATABASE_URL` environment variable
 - **1-Click Infrastructure Blueprint**: [`render.yaml`](./render.yaml) (Turnkey Render blueprint)
 
 ---
@@ -222,7 +222,7 @@ A full CI workflow is configured in [`.github/workflows/ci.yml`](./.github/workf
 - **Service Container**: Automatically starts an isolated PostgreSQL 15 instance.
 - **Schema Migration**: Applies versioned Prisma migrations to a clean PostgreSQL database.
 - **Seeding**: Executes `db:seed` against test database.
-- **Test Suites**: Executes **all 40 automated tests** (32 backend integration tests + 8 frontend component tests).
+- **Test Suites**: Executes **all 40 automated tests** (32 backend integration tests + 8 frontend component tests). The separate live audit script reports 36 checks; those are not additional unit tests.
 - **Production Build**: Compiles backend (`tsc`) and frontend (`vite build`) to guarantee zero compile-time regressions.
 
 ---
@@ -234,8 +234,8 @@ IncidentFlow includes an optional, realistic development seed script (`npm run d
 > [!IMPORTANT]
 > - **Zero Hardcoded Data**: The frontend application contains **no fake or hardcoded incidents, services, comments, timeline events, or metrics**. Every table row, chart data point, and badge is queried from PostgreSQL via REST APIs.
 > - **Demonstration Purpose**: All initial incidents (e.g. Stripe webhook timeouts, database connection pool exhaustion) and accounts (`admin@incidentflow.dev`, `engineer@incidentflow.dev`) are demo records.
-> - **Clean Production Start**: In production (`NODE_ENV=production`), the application boots with a clean schema and **never automatically executes the seed script**. For a clean, empty database, apply migrations with `npx prisma migrate deploy` without running `npm run db:seed`. The UI will display empty states with call-to-action buttons.
-> - **Re-seeding**: To reset the demo state at any time, execute `npm run db:seed` from the root directory.
+> - **Clean Production Start**: In production (`NODE_ENV=production`), the application never automatically executes the seed script. Apply versioned migrations with `npm run db:migrate`; the UI displays empty states until records are added.
+> - **Safe seeding**: The seed script only runs against local PostgreSQL by default. It deletes and recreates demo records, so use a disposable local database. Seeding a non-local database requires the deliberate `FORCE_SEED=true` override.
 
 ### Seed Accounts (Local Development)
 
@@ -277,16 +277,22 @@ cp .env.example .env
 ### 1. Install Dependencies
 
 ```bash
-npm install
+npm ci --prefix backend
+npm ci --prefix frontend
 ```
 
 ### 2. Set Up Database
 
 ```bash
-# Apply versioned schema migrations to PostgreSQL
-npm run db:migrate
+# Start Postgres with Docker, or start your local PostgreSQL service first.
+docker compose up -d postgres
 
-# Seed demo users, services, and realistic incidents
+# Create and use a dedicated, disposable database. Do not point this at production.
+docker compose exec postgres createdb -U postgres incidentflow_demo
+export DATABASE_URL='postgresql://postgres:postgres@localhost:5432/incidentflow_demo?schema=public'
+
+# Apply versioned schema migrations and seed demo records.
+npm run db:migrate
 npm run db:seed
 ```
 
@@ -324,7 +330,7 @@ To seed initial data inside Docker:
 
 ```bash
 docker compose exec backend npx prisma migrate deploy
-docker compose exec backend npm run db:seed
+docker compose exec -e FORCE_SEED=true backend npm run db:seed
 ```
 
 ---

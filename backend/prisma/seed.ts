@@ -4,11 +4,26 @@ import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
 async function main() {
-  if (process.env.NODE_ENV === 'production' && process.env.FORCE_SEED !== 'true') {
+  const forceSeed = process.env.FORCE_SEED === 'true';
+  const databaseHost = (() => {
+    try {
+      return new URL(process.env.DATABASE_URL || '').hostname;
+    } catch {
+      return '';
+    }
+  })();
+  const isLocalDatabase = ['localhost', '127.0.0.1', '::1', 'postgres'].includes(databaseHost);
+
+  if (process.env.NODE_ENV === 'production' && !forceSeed) {
     console.warn(
       '⚠️  SKIPPING SEED: Database seeding is restricted to development/demo environments. Set FORCE_SEED=true to override.'
     );
     return;
+  }
+  if (!isLocalDatabase && !forceSeed) {
+    throw new Error(
+      `Refusing to seed non-local database host "${databaseHost || 'unknown'}". Use a disposable local database or set FORCE_SEED=true deliberately.`
+    );
   }
 
   console.log('=====================================================');
