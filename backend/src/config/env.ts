@@ -5,11 +5,13 @@ import path from 'path';
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 dotenv.config();
 
+const DEVELOPMENT_JWT_SECRET = 'development-jwt-secret-incidentflow-2026';
+
 export const ENV = {
   PORT: process.env.PORT ? parseInt(process.env.PORT, 10) : 4000,
   NODE_ENV: process.env.NODE_ENV || 'development',
   DATABASE_URL: process.env.DATABASE_URL || 'postgresql://postgres:postgres@localhost:5432/incidentflow?schema=public',
-  JWT_SECRET: process.env.JWT_SECRET || 'development-jwt-secret-incidentflow-2026',
+  JWT_SECRET: process.env.JWT_SECRET || DEVELOPMENT_JWT_SECRET,
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '7d',
   // Deliberately has no default: webhook ingress stays disabled until configured.
   WEBHOOK_SECRET: process.env.WEBHOOK_SECRET,
@@ -17,6 +19,13 @@ export const ENV = {
 
 if (ENV.NODE_ENV === 'production' && !ENV.WEBHOOK_SECRET) {
   throw new Error('WEBHOOK_SECRET must be set in production.');
+}
+
+if (
+  ENV.NODE_ENV === 'production' &&
+  (!process.env.JWT_SECRET || process.env.JWT_SECRET === DEVELOPMENT_JWT_SECRET)
+) {
+  throw new Error('JWT_SECRET must be explicitly set to a non-development value in production.');
 }
 
 if (ENV.NODE_ENV === 'production' && ENV.JWT_SECRET.length < 32) {

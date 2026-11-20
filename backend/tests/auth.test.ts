@@ -10,7 +10,6 @@ describe('Authentication API', () => {
     name: 'Auth Test User',
     email: `authtest_${Date.now()}@incidentflow.dev`,
     password: 'Password123!',
-    role: 'ENGINEER' as const,
   };
 
   afterAll(async () => {
@@ -23,11 +22,12 @@ describe('Authentication API', () => {
   it('should register a new user successfully', async () => {
     const res = await request(app)
       .post('/api/auth/register')
-      .send(testUser);
+      .send({ ...testUser, role: 'ADMIN' });
 
     expect(res.status).toBe(201);
     expect(res.body.success).toBe(true);
     expect(res.body.data.user.email).toBe(testUser.email.toLowerCase());
+    expect(res.body.data.user.role).toBe('ENGINEER');
     expect(res.body.data.user.passwordHash).toBeUndefined();
     expect(res.body.data.token).toBeDefined();
   });

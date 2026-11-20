@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { Role } from '@prisma/client';
 import { prisma } from '../../config/prisma';
 import { ENV } from '../../config/env';
 import { ConflictError, UnauthorizedError } from '../../utils/errors';
@@ -22,7 +23,7 @@ export class AuthService {
         name: input.name,
         email: input.email.toLowerCase(),
         passwordHash,
-        role: input.role,
+        role: Role.ENGINEER,
       },
       select: {
         id: true,

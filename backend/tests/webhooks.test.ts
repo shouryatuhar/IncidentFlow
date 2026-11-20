@@ -155,4 +155,37 @@ describe('Webhook Ingress API', () => {
     expect(retry.body.data.id).toBe(first.body.data.id);
     createdIncidentIds.push(first.body.data.id);
   });
+
+  it('should create one incident and one CREATED timeline event for 50 concurrent retries', async () => {
+    const eventId = `concurrent-provider-event-${Date.now()}`;
+    const payload = {
+      service: paymentService.name,
+      title: 'Concurrent retry storm alert',
+      description: 'Fifty simultaneous provider retries share one event ID',
+      severity: 'SEV_2',
+    } as const;
+
+    const responses = await Promise.all(
+      Array.from({ length: 50 }, () =>
+        request(app)
+          .post('/api/webhooks/incidents')
+          .set('x-webhook-secret', ENV.WEBHOOK_SECRET)
+          .set('Idempotency-Key', eventId)
+          .send(payload)
+      )
+    );
+
+    expect(responses.filter((response) => response.status === 201)).toHaveLength(1);
+    expect(responses.filter((response) => response.status === 200)).toHaveLength(49);
+
+    const incidentIds = new Set(responses.map((response) => response.body.data.id));
+    expect(incidentIds.size).toBe(1);
+    const [incidentId] = incidentIds;
+    createdIncidentIds.push(incidentId);
+
+    expect(await prisma.incident.count({ where: { sourceEventId: eventId } })).toBe(1);
+    expect(
+      await prisma.timelineEvent.count({ where: { incidentId, type: 'CREATED' } })
+    ).toBe(1);
+  }, 30000);
 });

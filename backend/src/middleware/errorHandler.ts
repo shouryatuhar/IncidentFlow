@@ -23,7 +23,7 @@ export const errorHandler = (
   console.error(JSON.stringify({
     level: 'error',
     event: 'http_unhandled_error',
-    requestId: String(_req.get('X-Request-ID') || ''),
+    requestId: String(res.getHeader('X-Request-ID') || ''),
     errorName: err.name,
   }));
 

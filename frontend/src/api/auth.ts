@@ -1,11 +1,10 @@
 import { apiClient } from './client';
-import { User, Role } from '../types';
+import { User } from '../types';
 
 export interface RegisterParams {
   name: string;
   email: string;
   password: string;
-  role?: Role;
 }
 
 export interface LoginParams {

@@ -43,6 +43,7 @@ export const IncidentsPage: React.FC = () => {
         sortBy: 'createdAt',
         sortOrder: 'desc',
       }),
+    refetchInterval: 3000,
   });
 
   const handleResetFilters = () => {

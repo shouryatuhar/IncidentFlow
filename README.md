@@ -65,7 +65,7 @@ Inspired by internal engineering operations tools like Linear and PagerDuty, Inc
 - **Database & ORM**: PostgreSQL with Prisma ORM providing compile-time type safety, relational foreign key constraints, cascade deletes, and migrations.
 - **Security**: Hardened with `helmet` HTTP headers, request-size limits, API/auth/webhook rate limits, bcrypt password hashing, and signed JWT bearer tokens.
 - **Webhook reliability**: Optional provider event IDs or `Idempotency-Key` headers prevent duplicate incidents; incident and timeline writes commit atomically, including on concurrent retries.
-- **Operational visibility**: Every API response includes an `X-Request-ID`; structured request logs carry request/trace IDs, `/api/metrics` exposes route-level counts/errors/latency, and OpenTelemetry auto-instrumentation exports traces and metrics to an OTLP collector when configured.
+- **Operational visibility**: Every API response includes an `X-Request-ID`; structured request logs include request IDs, `/api/metrics` exposes process-local route counts/errors/latency, and the long-running server exports OpenTelemetry traces and metrics to an OTLP collector when configured. The Vercel function entry point does not initialize the OpenTelemetry SDK.
 - **API Documentation**: Built-in interactive OpenAPI 3.0 / Swagger documentation mounted at `/api/docs`.
 
 ---
@@ -152,7 +152,7 @@ IncidentFlow/
 ### 2. Persistent Database Audit Timeline
 - All timeline events are stored in PostgreSQL table `timeline_events`.
 - Automatically logs transitions:
-  - Incident declaration (`CREATED` / `WEBHOOK_CREATED`)
+  - Incident declaration (`CREATED`)
   - Engineer assignments (`ASSIGNED` / `UNASSIGNED`)
   - Severity level updates (`SEV_3` → `SEV_2`)
   - Status updates (`INVESTIGATING` → `IDENTIFIED` → `RESOLVED`)
@@ -177,12 +177,12 @@ IncidentFlow/
   - Severity distribution bar chart.
   - Status breakdown chart.
   - Top affected services bar chart.
-- **Recent Alerts**: Live feed of active production incidents.
+- **Recent Alerts**: Incident and dashboard data refreshes every 3 seconds while the page is open.
 
 ### 5. Inbound Monitoring Webhook Ingress
 External monitoring systems (Datadog, Prometheus Alertmanager, Grafana, CloudWatch) can declare incidents automatically via `POST /api/webhooks/incidents`. Include a stable provider event ID in the `Idempotency-Key` header (or `eventId` payload field) so retries return the existing incident rather than creating duplicates. Requests without an event ID preserve the original create-each-delivery behavior.
 
-For distributed traces and OpenTelemetry metrics, configure `OTEL_EXPORTER_OTLP_ENDPOINT` with an OTLP HTTP collector endpoint (for example, `http://localhost:4318`). Local route-level request summaries remain available at `GET /api/metrics` without a collector.
+For OpenTelemetry traces and metrics from the long-running backend started by `src/server.ts`, configure `OTEL_EXPORTER_OTLP_ENDPOINT` with an OTLP HTTP collector endpoint (for example, `http://localhost:4318`). The Vercel serverless entry point does not initialize that exporter. Process-local route summaries remain available at `GET /api/metrics` without a collector.
 - Authenticated via configurable `x-webhook-secret` header.
 - Validates payload with Zod schemas.
 - Resolves affected service by name or ID.
@@ -222,7 +222,7 @@ A full CI workflow is configured in [`.github/workflows/ci.yml`](./.github/workf
 - **Service Container**: Automatically starts an isolated PostgreSQL 15 instance.
 - **Schema Migration**: Applies versioned Prisma migrations to a clean PostgreSQL database.
 - **Seeding**: Executes `db:seed` against test database.
-- **Test Suites**: Executes **all 40 automated tests** (32 backend integration tests + 8 frontend component tests). The separate live audit script reports 36 checks; those are not additional unit tests.
+- **Test Suites**: Executes **all 46 automated tests** (37 backend tests + 9 frontend component tests). The separate local end-to-end audit script reports 36 checks; those are not additional tests in the suite.
 - **Production Build**: Compiles backend (`tsc`) and frontend (`vite build`) to guarantee zero compile-time regressions.
 
 ---
@@ -349,7 +349,7 @@ npm run test:backend
 # Run frontend tests only (Vitest + React Testing Library)
 npm run test:frontend
 
-# Run complete 36-point live end-to-end integration audit
+# Run the 36-check local end-to-end audit (requires the local backend and matching WEBHOOK_SECRET)
 npx tsx backend/tests/full_audit.ts
 
 # Production build check

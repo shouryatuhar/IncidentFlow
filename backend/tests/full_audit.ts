@@ -2,7 +2,11 @@ import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 const API_URL = 'http://localhost:4000/api';
-const WEBHOOK_SECRET = 'incidentflow-whsec-supersecretkey123';
+const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET;
+
+if (!WEBHOOK_SECRET) {
+  throw new Error('WEBHOOK_SECRET must be set to the same value used by the local backend.');
+}
 
 interface AuditResult {
   category: string;

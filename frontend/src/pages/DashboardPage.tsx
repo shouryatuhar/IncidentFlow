@@ -33,21 +33,25 @@ export const DashboardPage: React.FC = () => {
   const { data: overview, isLoading: isOverviewLoading, dataUpdatedAt } = useQuery({
     queryKey: ['analytics', 'overview'],
     queryFn: () => analyticsApi.getOverview(),
+    refetchInterval: 3000,
   });
 
   const { data: analytics, isLoading: isAnalyticsLoading } = useQuery({
     queryKey: ['analytics', 'incidents'],
     queryFn: () => analyticsApi.getIncidents(),
+    refetchInterval: 3000,
   });
 
   const { data: recentData, isLoading: isRecentLoading } = useQuery({
     queryKey: ['incidents', 'recent'],
     queryFn: () => incidentsApi.list({ limit: 5, sortBy: 'createdAt', sortOrder: 'desc' }),
+    refetchInterval: 3000,
   });
 
   const { data: services = [] } = useQuery({
     queryKey: ['services'],
     queryFn: () => servicesApi.list(),
+    refetchInterval: 3000,
   });
   const isDemoAccount = user?.email.endsWith('@incidentflow.dev') ?? false;
 

@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { Button } from '../components/common/Button';
-import { Role } from '../types';
 import { Lock, Mail, User, ArrowRight } from 'lucide-react';
 
 export const RegisterPage: React.FC = () => {
@@ -14,7 +13,6 @@ export const RegisterPage: React.FC = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<Role>('ENGINEER');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -35,7 +33,6 @@ export const RegisterPage: React.FC = () => {
         name: name.trim(),
         email: email.trim().toLowerCase(),
         password,
-        role,
       });
       success('Account registered successfully! Welcome to IncidentFlow.');
       navigate('/dashboard');
@@ -113,36 +110,6 @@ export const RegisterPage: React.FC = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full h-8 pl-8 pr-2.5 bg-[#111411] border border-[#30372f] hover:border-[#3c453a] focus:border-[#a2aa83] rounded-[5px] text-xs text-[#dce1d8] placeholder-[#818b7e] focus:outline-none transition-colors"
                 />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-[11px] font-medium uppercase tracking-wider text-[#818b7e] mb-1">
-                Platform Role
-              </label>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => setRole('ENGINEER')}
-                  className={`h-8 px-2 rounded-[5px] text-xs font-medium border transition-colors cursor-pointer ${
-                    role === 'ENGINEER'
-                      ? 'bg-[#242a23] border-[#a2aa83] text-[#e8ebe4]'
-                      : 'bg-[#111411] border-[#30372f] text-[#818b7e] hover:text-[#dce1d8]'
-                  }`}
-                >
-                  Engineer
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setRole('ADMIN')}
-                  className={`h-8 px-2 rounded-[5px] text-xs font-medium border transition-colors cursor-pointer ${
-                    role === 'ADMIN'
-                      ? 'bg-[#242a23] border-[#a2aa83] text-[#e8ebe4]'
-                      : 'bg-[#111411] border-[#30372f] text-[#818b7e] hover:text-[#dce1d8]'
-                  }`}
-                >
-                  Admin
-                </button>
               </div>
             </div>
 
