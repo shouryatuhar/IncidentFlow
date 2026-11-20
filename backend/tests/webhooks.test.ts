@@ -118,6 +118,7 @@ describe('Webhook Ingress API', () => {
     expect(res.body.success).toBe(true);
     expect(res.body.data.title).toBe('Payment API latency above threshold');
     expect(res.body.data.service.id).toBe(paymentService.id);
+    expect(res.body.data.isDemo).toBe(false);
     createdIncidentIds.push(res.body.data.id);
 
     // Verify timeline event was persisted in PostgreSQL

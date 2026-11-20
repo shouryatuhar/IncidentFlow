@@ -10,6 +10,7 @@ import servicesRoutes from './modules/services/services.routes';
 import incidentsRoutes from './modules/incidents/incidents.routes';
 import analyticsRoutes from './modules/analytics/analytics.routes';
 import webhooksRoutes from './modules/webhooks/webhooks.routes';
+import demoRoutes from './modules/demo/demo.routes';
 import { errorHandler } from './middleware/errorHandler';
 import { NotFoundError } from './utils/errors';
 import { requestObservability, getHttpMetrics } from './middleware/observability';
@@ -30,6 +31,7 @@ export const createApp = () => {
       origin: '*',
       methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
       allowedHeaders: ['Content-Type', 'Authorization', 'x-webhook-secret', 'Idempotency-Key', 'x-event-id'],
+      exposedHeaders: ['X-Request-ID'],
     })
   );
 
@@ -97,6 +99,7 @@ export const createApp = () => {
   app.use('/api/services', servicesRoutes);
   app.use('/api/incidents', incidentsRoutes);
   app.use('/api/analytics', analyticsRoutes);
+  app.use('/api/demo', demoRoutes);
   const webhookLimiter = rateLimit({
     windowMs: 60 * 1000,
     max: 60,

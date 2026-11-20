@@ -11,9 +11,11 @@ import {
   Plus,
   Menu,
   X,
+  FlaskConical,
 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { CreateIncidentModal } from '../incidents/CreateIncidentModal';
+import { isSeededDemoAccount } from '../../api/demo';
 
 export const AppLayout: React.FC = () => {
   const { user, logout } = useAuth();
@@ -33,6 +35,7 @@ export const AppLayout: React.FC = () => {
     { to: '/services', label: 'Services', icon: Server },
     { to: '/analytics', label: 'Analytics', icon: BarChart3 },
     { to: '/settings', label: 'Settings', icon: Settings },
+    ...(isSeededDemoAccount(user?.email) ? [{ to: '/demo-lab', label: 'Demo Lab', icon: FlaskConical }] : []),
   ];
 
   // Derive current page title for the header bar

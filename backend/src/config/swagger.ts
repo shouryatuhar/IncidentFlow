@@ -410,6 +410,48 @@ export const swaggerSpec = {
         responses: { 200: { description: 'Categorized incident distributions' } },
       },
     },
+    '/demo/alert': {
+      post: {
+        summary: 'Create or deduplicate a simulated monitoring alert (seeded demo accounts only)',
+        tags: ['Demo Lab'],
+        security: [{ BearerAuth: [] }],
+        requestBody: {
+          required: true,
+          content: {
+            'application/json': {
+              schema: {
+                type: 'object',
+                required: ['idempotencyKey', 'service', 'severity'],
+                properties: {
+                  idempotencyKey: { type: 'string', minLength: 1, maxLength: 150 },
+                  service: { type: 'string', example: 'Payment API' },
+                  severity: { type: 'string', enum: ['SEV_1', 'SEV_2', 'SEV_3', 'SEV_4'] },
+                },
+              },
+            },
+          },
+        },
+        responses: {
+          201: { description: 'Demo incident created; response includes incidentId and duplicate=false' },
+          200: { description: 'Idempotent retry; response includes the original incidentId and duplicate=true' },
+          401: { description: 'Authentication required' },
+          403: { description: 'Only seeded demo accounts can use Demo Lab' },
+          429: { description: 'Demo Lab rate limit exceeded' },
+        },
+      },
+    },
+    '/demo/reset': {
+      post: {
+        summary: 'Delete simulated incidents (seeded demo accounts only)',
+        tags: ['Demo Lab'],
+        security: [{ BearerAuth: [] }],
+        responses: {
+          200: { description: 'Demo incidents deleted; response includes deleted count' },
+          401: { description: 'Authentication required' },
+          403: { description: 'Only seeded demo accounts can use Demo Lab' },
+        },
+      },
+    },
     '/webhooks/incidents': {
       post: {
         summary: 'Automated monitoring webhook ingress (Datadog, Prometheus, Grafana, CloudWatch)',

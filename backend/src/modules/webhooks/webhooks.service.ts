@@ -26,7 +26,10 @@ export class WebhooksService {
     }
   }
 
-  static async handleIncomingIncident(input: WebhookIncidentInput) {
+  static async handleIncomingIncident(
+    input: WebhookIncidentInput,
+    options: { isDemo?: boolean } = {}
+  ) {
     if (input.eventId) {
       const existingIncident = await prisma.incident.findUnique({
         where: { sourceEventId: input.eventId },
@@ -83,6 +86,7 @@ export class WebhooksService {
             reporterId,
             assigneeId: service.ownerId,
             sourceEventId: input.eventId,
+            isDemo: options.isDemo ?? false,
           },
           include: {
             service: true,

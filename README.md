@@ -65,6 +65,7 @@ Inspired by internal engineering operations tools like Linear and PagerDuty, Inc
 - **Database & ORM**: PostgreSQL with Prisma ORM providing compile-time type safety, relational foreign key constraints, cascade deletes, and migrations.
 - **Security**: Hardened with `helmet` HTTP headers, request-size limits, API/auth/webhook rate limits, bcrypt password hashing, and signed JWT bearer tokens.
 - **Webhook reliability**: Optional provider event IDs or `Idempotency-Key` headers prevent duplicate incidents; incident and timeline writes commit atomically, including on concurrent retries.
+- **Demo Lab**: Seeded demo accounts can fire simulated alerts through the same webhook service, replay idempotency keys, run a 50-request retry storm, and reset only incidents marked as demo data. Latency summaries come from the browser's actual HTTP responses.
 - **Operational visibility**: Every API response includes an `X-Request-ID`; structured request logs include request IDs, `/api/metrics` exposes process-local route counts/errors/latency, and the long-running server exports OpenTelemetry traces and metrics to an OTLP collector when configured. The Vercel function entry point does not initialize the OpenTelemetry SDK.
 - **API Documentation**: Built-in interactive OpenAPI 3.0 / Swagger documentation mounted at `/api/docs`.
 
@@ -108,6 +109,7 @@ IncidentFlow/
 │   │   ├── modules/
 │   │   │   ├── analytics/     # MTTR and incident volume aggregation endpoints
 │   │   │   ├── auth/          # Register, Login, Session (/api/auth/me)
+│   │   │   ├── demo/          # Demo-only alert simulation and reset endpoints
 │   │   │   ├── comments/      # Incident comments and auto-timeline logging
 │   │   │   ├── incidents/     # Incident CRUD, triage, filtering, search
 │   │   │   ├── services/      # Microservice catalog CRUD with RBAC
@@ -125,7 +127,7 @@ IncidentFlow/
 │   │   ├── api/               # Typed Axios/Fetch client modules
 │   │   ├── components/        # Badges, Buttons, Modals, Tables, Timeline, Comments
 │   │   ├── context/           # AuthContext and ToastContext
-│   │   ├── pages/             # Dashboard, Incidents, Detail, Services, Analytics, Settings, Auth
+│   │   ├── pages/             # Dashboard, Incidents, Detail, Services, Analytics, Demo Lab, Settings, Auth
 │   │   └── tests/             # React Testing Library component tests
 │   ├── Dockerfile
 │   ├── nginx.conf
@@ -188,6 +190,9 @@ For OpenTelemetry traces and metrics from the long-running backend started by `s
 - Resolves affected service by name or ID.
 - Automatically creates incident, auto-assigns service owner, and logs initial timeline event.
 
+### 6. Demo Lab
+The authenticated Demo Lab is available only to the four seeded demo accounts. Its browser controls call `POST /api/demo/alert`, which invokes the existing webhook incident service on the server; the webhook secret is never sent to the browser. Alerts are tagged with `isDemo`, and `POST /api/demo/reset` deletes only tagged incidents. The retry storm sends up to 50 concurrent requests with one idempotency key. Results show actual HTTP status counts, p50/p95 response latency, and the last `X-Request-ID` returned by the API.
+
 ---
 
 ## Security & Reliability Engineering
@@ -211,7 +216,7 @@ IncidentFlow serves an interactive Swagger UI directly from the backend server:
 - **Swagger UI**: [http://localhost:4000/api/docs](http://localhost:4000/api/docs)
 - **Raw OpenAPI 3.0 Spec**: [http://localhost:4000/api/docs.json](http://localhost:4000/api/docs.json)
 
-The specification details request bodies, query parameters, authorization requirements (`BearerAuth` and `WebhookSecretAuth`), and response models for all 14 REST endpoints.
+The specification details request bodies, query parameters, authorization requirements (`BearerAuth` and `WebhookSecretAuth`), and response models for all REST routes.
 
 ---
 
@@ -222,7 +227,7 @@ A full CI workflow is configured in [`.github/workflows/ci.yml`](./.github/workf
 - **Service Container**: Automatically starts an isolated PostgreSQL 15 instance.
 - **Schema Migration**: Applies versioned Prisma migrations to a clean PostgreSQL database.
 - **Seeding**: Executes `db:seed` against test database.
-- **Test Suites**: Executes **all 46 automated tests** (37 backend tests + 9 frontend component tests). The separate local end-to-end audit script reports 36 checks; those are not additional tests in the suite.
+- **Test Suites**: Executes **all 53 automated tests** (42 backend tests + 11 frontend tests). The separate local end-to-end audit script reports 36 checks; those are not additional tests in the suite.
 - **Production Build**: Compiles backend (`tsc`) and frontend (`vite build`) to guarantee zero compile-time regressions.
 
 ---
