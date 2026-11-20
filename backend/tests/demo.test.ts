@@ -8,8 +8,10 @@ const app = createApp();
 
 describe('Demo Lab API', () => {
   let demoToken: string;
+  let engineerToken: string;
   let regularToken: string;
   let regularUserId: string;
+  let registeredDomainUserId: string;
   let serviceName: string;
   const demoIncidentIds: string[] = [];
   let resetFixtureIds: string[] = [];
@@ -21,6 +23,12 @@ describe('Demo Lab API', () => {
       password: 'Password123!',
     });
     demoToken = demoLogin.body.data.token;
+
+    const engineerLogin = await request(app).post('/api/auth/login').send({
+      email: 'engineer@incidentflow.dev',
+      password: 'Password123!',
+    });
+    engineerToken = engineerLogin.body.data.token;
 
     const regularPasswordHash = await bcrypt.hash('Password123!', 10);
     const regularUser = await prisma.user.create({
@@ -50,7 +58,9 @@ describe('Demo Lab API', () => {
     if (resetFixtureIds.length) {
       await prisma.incident.deleteMany({ where: { id: { in: resetFixtureIds } } });
     }
+    await prisma.incident.deleteMany({ where: { title: `Demo capacity fixture ${keyPrefix}` } });
     if (regularUserId) await prisma.user.delete({ where: { id: regularUserId } });
+    if (registeredDomainUserId) await prisma.user.delete({ where: { id: registeredDomainUserId } });
     await prisma.$disconnect();
   });
 
@@ -69,6 +79,23 @@ describe('Demo Lab API', () => {
       .set('Authorization', `Bearer ${regularToken}`)
       .send(alert(`${keyPrefix}-regular`));
     expect(regularAccount.status).toBe(403);
+  });
+
+  it('does not grant Demo Lab access to a newly registered incidentflow.dev address', async () => {
+    const registration = await request(app).post('/api/auth/register').send({
+      name: 'Registered Demo Domain User',
+      email: 'x@incidentflow.dev',
+      password: 'Password123!',
+    });
+    expect(registration.status).toBe(201);
+    registeredDomainUserId = registration.body.data.user.id;
+
+    const response = await request(app)
+      .post('/api/demo/alert')
+      .set('Authorization', `Bearer ${registration.body.data.token}`)
+      .send(alert(`${keyPrefix}-new-domain-user`));
+
+    expect(response.status).toBe(403);
   });
 
   it('validates alert fields before invoking the webhook path', async () => {
@@ -124,6 +151,72 @@ describe('Demo Lab API', () => {
     demoIncidentIds.push(incidentId);
     expect(await prisma.incident.count({ where: { sourceEventId: `demo:${(await prisma.user.findUnique({ where: { email: 'admin@incidentflow.dev' } }))?.id}:${key}` } })).toBe(1);
   }, 30000);
+
+  it('returns 429 after 50 requests reuse the same idempotency key within a minute', async () => {
+    const key = `${keyPrefix}-storm-cap`;
+    const responses = [];
+    for (let index = 0; index < 51; index += 1) {
+      responses.push(await request(app)
+        .post('/api/demo/alert')
+        .set('Authorization', `Bearer ${engineerToken}`)
+        .send(alert(key)));
+    }
+
+    expect(responses.filter((response) => response.status === 201)).toHaveLength(1);
+    expect(responses.filter((response) => response.status === 200)).toHaveLength(49);
+    expect(responses.filter((response) => response.status === 429)).toHaveLength(1);
+    const created = responses.find((response) => response.status === 201);
+    if (created?.body.incidentId) demoIncidentIds.push(created.body.incidentId);
+  }, 30000);
+
+  it('prunes demo incidents older than one hour before creating an alert', async () => {
+    const user = await prisma.user.findUniqueOrThrow({ where: { email: 'admin@incidentflow.dev' } });
+    const service = await prisma.service.findUniqueOrThrow({ where: { name: serviceName } });
+    const oldIncident = await prisma.incident.create({
+      data: {
+        title: `Expired demo fixture ${keyPrefix}`,
+        description: 'This demo incident is older than the retention window.',
+        severity: 'SEV_4',
+        serviceId: service.id,
+        reporterId: user.id,
+        isDemo: true,
+        createdAt: new Date(Date.now() - 2 * 60 * 60 * 1000),
+      },
+    });
+
+    const response = await request(app)
+      .post('/api/demo/alert')
+      .set('Authorization', `Bearer ${demoToken}`)
+      .send(alert(`${keyPrefix}-prune`));
+
+    expect(response.status).toBe(201);
+    expect(await prisma.incident.findUnique({ where: { id: oldIncident.id } })).toBeNull();
+    demoIncidentIds.push(response.body.incidentId);
+  });
+
+  it('returns 429 when more than 200 demo incidents already exist', async () => {
+    const user = await prisma.user.findUniqueOrThrow({ where: { email: 'admin@incidentflow.dev' } });
+    const service = await prisma.service.findUniqueOrThrow({ where: { name: serviceName } });
+    await prisma.incident.createMany({
+      data: Array.from({ length: 201 }, (_, index) => ({
+        title: `Demo capacity fixture ${keyPrefix}`,
+        description: `Capacity fixture ${index}`,
+        severity: 'SEV_4' as const,
+        serviceId: service.id,
+        reporterId: user.id,
+        isDemo: true,
+      })),
+    });
+
+    const response = await request(app)
+      .post('/api/demo/alert')
+      .set('Authorization', `Bearer ${demoToken}`)
+      .send(alert(`${keyPrefix}-capacity`));
+
+    expect(response.status).toBe(429);
+    expect(response.body.error.message).toContain('capacity reached');
+    await prisma.incident.deleteMany({ where: { title: `Demo capacity fixture ${keyPrefix}` } });
+  });
 
   it('reset deletes demo incidents and preserves ordinary incidents', async () => {
     const user = await prisma.user.findUniqueOrThrow({ where: { email: 'admin@incidentflow.dev' } });

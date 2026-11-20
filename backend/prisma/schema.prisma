@@ -33,13 +33,13 @@ enum IncidentStatus {
 }
 
 model User {
-  id           String   @id @default(uuid())
-  name         String
-  email        String   @unique
-  passwordHash String
-  role         Role     @default(ENGINEER)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  id                String            @id @default(uuid())
+  name              String
+  email             String            @unique
+  passwordHash      String
+  role              Role              @default(ENGINEER)
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
 
   ownedServices     Service[]         @relation("ServiceOwner")
   reportedIncidents Incident[]        @relation("ReportedIncidents")
@@ -60,32 +60,32 @@ model Service {
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
-  incidents Incident[]
+  incidents   Incident[]
 
   @@map("services")
 }
 
 model Incident {
-  id            String         @id @default(uuid())
-  title         String
-  description   String
-  severity      Severity
-  status        IncidentStatus @default(INVESTIGATING)
-  serviceId     String
-  service       Service        @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  reporterId    String
-  reporter      User           @relation("ReportedIncidents", fields: [reporterId], references: [id])
-  assigneeId    String?
-  assignee      User?          @relation("AssignedIncidents", fields: [assigneeId], references: [id])
-  startedAt     DateTime       @default(now())
-  resolvedAt    DateTime?
+  id          String         @id @default(uuid())
+  title       String
+  description String
+  severity    Severity
+  status      IncidentStatus @default(INVESTIGATING)
+  serviceId   String
+  service     Service        @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  reporterId  String
+  reporter    User           @relation("ReportedIncidents", fields: [reporterId], references: [id])
+  assigneeId  String?
+  assignee    User?          @relation("AssignedIncidents", fields: [assigneeId], references: [id])
+  startedAt   DateTime       @default(now())
+  resolvedAt  DateTime?
   sourceEventId String?        @unique
   isDemo        Boolean        @default(false)
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @updatedAt
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 
-  comments IncidentComment[]
-  timeline TimelineEvent[]
+  comments    IncidentComment[]
+  timeline    TimelineEvent[]
 
   @@index([status])
   @@index([severity])

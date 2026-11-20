@@ -7,6 +7,19 @@ export class DemoController {
   static async alert(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { idempotencyKey, service, severity } = req.body as DemoAlertInput;
+      const cleanupBefore = new Date(Date.now() - 60 * 60 * 1000);
+      await prisma.incident.deleteMany({
+        where: { isDemo: true, createdAt: { lt: cleanupBefore } },
+      });
+      const demoIncidentCount = await prisma.incident.count({ where: { isDemo: true } });
+      if (demoIncidentCount > 200) {
+        res.status(429).json({
+          success: false,
+          error: { message: 'Demo incident capacity reached. Reset demo data and try again.' },
+        });
+        return;
+      }
+
       const eventId = `demo:${req.user!.id}:${idempotencyKey}`;
       const result = await WebhooksService.handleIncomingIncident(
         {
