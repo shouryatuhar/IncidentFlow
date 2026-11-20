@@ -107,6 +107,17 @@ model IncidentComment {
   @@map("incident_comments")
 }
 
+model DemoStormBucket {
+  userId          String
+  idempotencyKey  String
+  windowStartedAt DateTime @default(now())
+  count           Int      @default(1)
+
+  @@id([userId, idempotencyKey])
+  @@index([windowStartedAt])
+  @@map("demo_storm_buckets")
+}
+
 model TimelineEvent {
   id         String   @id @default(uuid())
   incidentId String

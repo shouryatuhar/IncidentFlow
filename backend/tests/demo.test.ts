@@ -59,6 +59,7 @@ describe('Demo Lab API', () => {
       await prisma.incident.deleteMany({ where: { id: { in: resetFixtureIds } } });
     }
     await prisma.incident.deleteMany({ where: { title: `Demo capacity fixture ${keyPrefix}` } });
+    await prisma.demoStormBucket.deleteMany({ where: { idempotencyKey: { startsWith: keyPrefix } } });
     if (regularUserId) await prisma.user.delete({ where: { id: regularUserId } });
     if (registeredDomainUserId) await prisma.user.delete({ where: { id: registeredDomainUserId } });
     await prisma.$disconnect();
@@ -154,13 +155,12 @@ describe('Demo Lab API', () => {
 
   it('returns 429 after 50 requests reuse the same idempotency key within a minute', async () => {
     const key = `${keyPrefix}-storm-cap`;
-    const responses = [];
-    for (let index = 0; index < 51; index += 1) {
-      responses.push(await request(app)
+    const responses = await Promise.all(
+      Array.from({ length: 51 }, () => request(app)
         .post('/api/demo/alert')
         .set('Authorization', `Bearer ${engineerToken}`)
-        .send(alert(key)));
-    }
+        .send(alert(key)))
+    );
 
     expect(responses.filter((response) => response.status === 201)).toHaveLength(1);
     expect(responses.filter((response) => response.status === 200)).toHaveLength(49);
